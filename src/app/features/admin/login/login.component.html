@@ -1,0 +1,51 @@
+<section class="login-page">
+  <div class="login-top">
+    <img src="/logo.png" alt="Valahatti Technologies" class="login-logo">
+    <app-theme-toggle></app-theme-toggle>
+  </div>
+
+  <div class="login-card card">
+    <h1>Admin Login</h1>
+    <p>Sign in to view all client requests and manage leads.</p>
+
+    <form [formGroup]="loginForm" (ngSubmit)="submit()" novalidate>
+      <div class="form-group">
+        <label for="login-email">Email</label>
+        <input
+          id="login-email"
+          type="email"
+          formControlName="email"
+          placeholder="admin@valahatti.com"
+          autocomplete="email"
+          [class.invalid]="isInvalid('email')"
+        >
+        @if(isInvalid('email')){
+        <small class="field-error">{{ getError('email') }}</small>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="login-password">Password</label>
+        <input
+          id="login-password"
+          type="password"
+          formControlName="password"
+          placeholder="Enter password"
+          autocomplete="current-password"
+          [class.invalid]="isInvalid('password')"
+        >
+        @if(isInvalid('password')){
+        <small class="field-error">{{ getError('password') }}</small>
+        }
+      </div>
+
+      @if(errorMessage){
+      <div class="alert" role="alert">{{ errorMessage }}</div>
+      }
+
+      <button class="btn btn-primary" type="submit" [disabled]="isSubmitting">
+        {{ isSubmitting ? 'Signing in...' : 'Sign In' }}
+      </button>
+    </form>
+  </div>
+</section>

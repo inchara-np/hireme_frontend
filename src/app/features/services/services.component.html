@@ -1,0 +1,60 @@
+<app-page-header
+  title="Our Services"
+  subtitle="Professional software development for businesses, startups, and engineering students."
+></app-page-header>
+
+<section class="services-page">
+  <div class="container">
+
+    <div class="cards">
+      <div class="card service-card">
+        <span class="icon">⚙️</span>
+        <h3>Backend Development</h3>
+        <p>Scalable APIs with Golang, Gin, PostgreSQL, JWT auth, file uploads, and cloud-ready architecture.</p>
+        <a routerLink="/contact" [queryParams]="{ type: 'business' }" class="link">Get a quote →</a>
+      </div>
+
+      <div class="card service-card">
+        <span class="icon">🖥️</span>
+        <h3>Frontend Development</h3>
+        <p>Modern Angular applications with SSR, responsive design, admin panels, and production builds.</p>
+        <a routerLink="/contact" [queryParams]="{ type: 'business' }" class="link">Get a quote →</a>
+      </div>
+
+      <div class="card service-card">
+        <span class="icon">🎓</span>
+        <h3>Student Projects</h3>
+        <p>Mini, major, IEEE, and research projects with code, documentation, report, and viva support.</p>
+        <a routerLink="/student-projects" class="link">Get project help →</a>
+      </div>
+
+      <div class="card service-card">
+        <span class="icon">☁️</span>
+        <h3>DevOps & Deployment</h3>
+        <p>Docker, CI/CD, environment setup, SSL, and secure production deployment.</p>
+        <a routerLink="/contact" class="link">Discuss deployment →</a>
+      </div>
+
+      <div class="card service-card">
+        <span class="icon">💼</span>
+        <h3>Freelance Development</h3>
+        <p>Hire on hourly, project, or retainer basis for flexible development support.</p>
+        <a routerLink="/freelance-services" class="link">Hire as freelancer →</a>
+      </div>
+
+      <div class="card service-card">
+        <span class="icon">🔍</span>
+        <h3>Code Review & Consulting</h3>
+        <p>Architecture review, performance audit, and technical guidance for your existing codebase.</p>
+        <a routerLink="/contact" class="link">Book consultation →</a>
+      </div>
+    </div>
+
+    <div class="bottom-cta card">
+      <h3>Not sure which service you need?</h3>
+      <p>Send your requirements and we'll recommend the best approach — free consultation.</p>
+      <a routerLink="/contact" class="btn btn-primary">Contact Us</a>
+    </div>
+
+  </div>
+</section>

@@ -1,0 +1,83 @@
+<app-page-header
+  title="Freelance Services"
+  subtitle="Available for contract-based development — remote, flexible, and results-driven."
+></app-page-header>
+
+<section class="freelance-page">
+  <div class="container">
+
+    <div class="intro-banner card">
+      <h2>Hire Me for Your Next Build</h2>
+      <p>
+        I'm a full-stack developer specializing in Golang backends and Angular frontends.
+        Whether you need a new feature, an MVP, or ongoing development support — I deliver
+        clean code with clear communication.
+      </p>
+      <div class="banner-actions">
+        <a routerLink="/contact" [queryParams]="{ type: 'freelance' }" class="btn btn-primary">Request a Quote</a>
+      </div>
+    </div>
+
+    <h2 class="section-title">What I Offer</h2>
+    <div class="offer-grid">
+      <div class="card">
+        <h3>🔧 Backend Development</h3>
+        <p>REST APIs, authentication, database design, microservices with Golang & PostgreSQL.</p>
+      </div>
+      <div class="card">
+        <h3>🎨 Frontend Development</h3>
+        <p>Responsive Angular apps, SSR, admin dashboards, and pixel-perfect UI implementation.</p>
+      </div>
+      <div class="card">
+        <h3>🔗 Full-Stack Projects</h3>
+        <p>End-to-end product development from requirements to production deployment.</p>
+      </div>
+      <div class="card">
+        <h3>🛠 Maintenance & Fixes</h3>
+        <p>Bug fixes, performance optimization, code review, and legacy system modernization.</p>
+      </div>
+    </div>
+
+    <h2 class="section-title">Engagement Models</h2>
+    <div class="pricing-grid">
+      <div class="card pricing-card">
+        <h3>Hourly</h3>
+        <p class="price">Flexible</p>
+        <p>Best for small tasks, bug fixes, and consultations.</p>
+        <ul>
+          <li>Pay as you go</li>
+          <li>Quick turnaround</li>
+          <li>No long commitment</li>
+        </ul>
+      </div>
+      <div class="card pricing-card featured">
+        <span class="badge">Recommended</span>
+        <h3>Project-Based</h3>
+        <p class="price">Fixed Scope</p>
+        <p>Best for MVPs, features, and defined deliverables.</p>
+        <ul>
+          <li>Clear milestones</li>
+          <li>Fixed timeline & cost</li>
+          <li>Weekly progress reports</li>
+        </ul>
+      </div>
+      <div class="card pricing-card">
+        <h3>Monthly Retainer</h3>
+        <p class="price">Ongoing</p>
+        <p>Best for startups needing continuous development.</p>
+        <ul>
+          <li>Dedicated availability</li>
+          <li>Priority support</li>
+          <li>Flexible scope each month</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="cta-box card">
+      <h3>Ready to work together?</h3>
+      <p>Send your project details and get a response within 24 hours.</p>
+      <a routerLink="/contact" [queryParams]="{ type: 'freelance' }" class="btn btn-primary">Start Hiring →</a>
+    </div>
+
+  </div>
+</section>

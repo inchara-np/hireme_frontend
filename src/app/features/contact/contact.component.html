@@ -1,0 +1,121 @@
+<app-page-header
+  [title]="pageTitle"
+  [subtitle]="pageSubtitle"
+></app-page-header>
+
+<section class="contact-page">
+  <div class="container">
+    <div class="contact-layout">
+      <aside class="contact-info card">
+        <h3>Let's build something great</h3>
+        <p>Whether you need a freelancer, a full project build, or student project support — we're here to help.</p>
+        <ul>
+          <li>✅ Response within 24 hours</li>
+          <li>✅ Free initial consultation</li>
+          <li>✅ Transparent pricing & timeline</li>
+          <li>✅ Email confirmation on submission</li>
+        </ul>
+      </aside>
+
+      <form [formGroup]="contactForm" (ngSubmit)="submit()" class="contact-form card" novalidate>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="contact-name">Full Name *</label>
+            <input
+              id="contact-name"
+              type="text"
+              formControlName="name"
+              placeholder="Your name"
+              [class.invalid]="isInvalid('name')"
+              autocomplete="name"
+            >
+            @if(isInvalid('name')){
+            <small class="field-error">{{ getError('name') }}</small>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="contact-email">Email *</label>
+            <input
+              id="contact-email"
+              type="email"
+              formControlName="email"
+              placeholder="you@example.com"
+              [class.invalid]="isInvalid('email')"
+              autocomplete="email"
+            >
+            @if(isInvalid('email')){
+            <small class="field-error">{{ getError('email') }}</small>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="contact-phone">Phone *</label>
+            <input
+              id="contact-phone"
+              type="tel"
+              formControlName="phone"
+              placeholder="10-digit mobile number"
+              maxlength="10"
+              [class.invalid]="isInvalid('phone')"
+              autocomplete="tel"
+            >
+            @if(isInvalid('phone')){
+            <small class="field-error">{{ getError('phone') }}</small>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="contact-company">Company</label>
+            <input
+              id="contact-company"
+              type="text"
+              formControlName="company"
+              placeholder="Optional"
+              [class.invalid]="isInvalid('company')"
+              autocomplete="organization"
+            >
+            @if(isInvalid('company')){
+            <small class="field-error">{{ getError('company') }}</small>
+            }
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="contact-message">Message *</label>
+          <textarea
+            id="contact-message"
+            rows="6"
+            formControlName="message"
+            placeholder="Describe your project, timeline, and budget..."
+            [class.invalid]="isInvalid('message')"
+          ></textarea>
+          @if(isInvalid('message')){
+          <small class="field-error">{{ getError('message') }}</small>
+          }
+          <small class="char-count">{{ message?.value?.length || 0 }} / 5000</small>
+        </div>
+
+        <div class="form-feedback">
+          @if(submitError){
+          <div class="alert alert-error" role="alert">{{ submitError }}</div>
+          }
+
+          @if(submitSuccess){
+          <div class="alert alert-success" role="status">{{ submitSuccess }}</div>
+          }
+        </div>
+
+        <button class="btn btn-primary submit-btn" type="submit" [disabled]="isSubmitting">
+          @if(isSubmitting){
+          <span class="spinner"></span>
+          Sending...
+          } @else {
+          Send Message
+          }
+        </button>
+      </form>
+    </div>
+  </div>
+</section>

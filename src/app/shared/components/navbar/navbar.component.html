@@ -1,0 +1,32 @@
+<nav class="navbar">
+
+  <a routerLink="/" class="logo">
+    <img src="/logo.png" alt="Valahatti Technologies" class="logo-img">
+    <div class="logo-text">
+      <span class="brand-main">Valahatti</span>
+      <span class="brand-sub">TECHNOLOGIES</span>
+    </div>
+  </a>
+
+  <button
+    type="button"
+    class="menu-toggle"
+    [class.open]="menuOpen"
+    (click)="toggleMenu()"
+    aria-label="Toggle navigation menu"
+  >
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <div class="nav-links" [class.open]="menuOpen">
+    <a routerLink="/" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+    <a routerLink="/services" class="nav-link" routerLinkActive="active">Services</a>
+    <a routerLink="/student-projects" class="nav-link" routerLinkActive="active">Student Projects</a>
+    <a routerLink="/freelance-services" class="nav-link" routerLinkActive="active">Freelance</a>
+    <a routerLink="/contact" class="nav-link" routerLinkActive="active">Contact</a>
+    <app-theme-toggle></app-theme-toggle>
+  </div>
+
+</nav>

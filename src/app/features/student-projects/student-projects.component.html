@@ -1,0 +1,159 @@
+<div class="student-project-page">
+
+  <div class="form-container">
+
+    <div class="form-header">
+      <h1>Get Your Academic Project Done</h1>
+      <p>
+        Hire us to build your mini, major, or IEEE project. Share your requirements and
+        we'll handle implementation, documentation, and delivery — you focus on your viva.
+      </p>
+    </div>
+
+    <form [formGroup]="projectForm" (ngSubmit)="submit()" novalidate>
+
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label>Full Name *</label>
+          <input type="text" placeholder="Enter your full name" formControlName="name" [class.invalid]="isInvalid('name')">
+          @if(isInvalid('name')){
+          <small class="field-error">{{ getError('name') }}</small>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Email *</label>
+          <input type="email" placeholder="Enter your email" formControlName="email" [class.invalid]="isInvalid('email')">
+          @if(isInvalid('email')){
+          <small class="field-error">{{ getError('email') }}</small>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Phone Number *</label>
+          <input type="tel" placeholder="10-digit mobile number" formControlName="phone" maxlength="10" [class.invalid]="isInvalid('phone')">
+          @if(isInvalid('phone')){
+          <small class="field-error">{{ getError('phone') }}</small>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>College Name *</label>
+          <input type="text" placeholder="Enter college name" formControlName="college" [class.invalid]="isInvalid('college')">
+          @if(isInvalid('college')){
+          <small class="field-error">{{ getError('college') }}</small>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Branch *</label>
+          <select formControlName="branch" [class.invalid]="isInvalid('branch')">
+            <option value="">Select Branch</option>
+            <option value="CSE">Computer Science</option>
+            <option value="ISE">Information Science</option>
+            <option value="ECE">Electronics & Communication</option>
+            <option value="EEE">Electrical & Electronics</option>
+            <option value="ME">Mechanical</option>
+            <option value="CV">Civil</option>
+            <option value="AIML">AI & ML</option>
+          </select>
+          @if(isInvalid('branch')){
+          <small class="field-error">{{ getError('branch') }}</small>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Project Type *</label>
+          <select formControlName="projectType" [class.invalid]="isInvalid('projectType')">
+            <option value="">Select Project Type</option>
+            <option value="mini">Mini Project</option>
+            <option value="major">Major Project</option>
+            <option value="ieee">IEEE Project</option>
+            <option value="research">Research Project</option>
+            <option value="internship">Internship Project</option>
+          </select>
+          @if(isInvalid('projectType')){
+          <small class="field-error">{{ getError('projectType') }}</small>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Project Submission Date *</label>
+          <input type="date" formControlName="expectedSubmissionDate" [class.invalid]="isInvalid('expectedSubmissionDate')">
+          @if(isInvalid('expectedSubmissionDate')){
+          <small class="field-error">{{ getError('expectedSubmissionDate') }}</small>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Project Urgency *</label>
+          <select formControlName="urgency" [class.invalid]="isInvalid('urgency')">
+            <option value="">Select Project Urgency</option>
+            <option value="1_week">Need Within 1 Week</option>
+            <option value="2_weeks">Need Within 2 Weeks</option>
+            <option value="1_month">Need Within 1 Month</option>
+            <option value="flexible">Flexible Timeline</option>
+          </select>
+          @if(isInvalid('urgency')){
+          <small class="field-error">{{ getError('urgency') }}</small>
+          }
+        </div>
+
+      </div>
+
+      <div class="form-group">
+        <label>Project Requirement / Idea *</label>
+        <textarea rows="6"
+          placeholder="Tell us about your project idea, domain, technology preference, or simply mention if you need us to suggest and develop a project for you."
+          formControlName="description"
+          [class.invalid]="isInvalid('description')">
+        </textarea>
+        @if(isInvalid('description')){
+        <small class="field-error">{{ getError('description') }}</small>
+        }
+      </div>
+
+      <div class="upload-section">
+        <h3>Supporting Documents</h3>
+        <p class="upload-info">
+          Upload synopsis, project requirements, diagrams,
+          screenshots, reference documents or project guidelines.
+        </p>
+        <input type="file" multiple (change)="onFilesSelected($event)" accept=".pdf,.doc,.docx,.ppt,.pptx,.zip">
+        <small class="help-text">Supported formats: PDF, DOC, DOCX, PPT, PPTX, ZIP (max 10 MB each)</small>
+
+        @if(fileError){
+        <small class="field-error">{{ fileError }}</small>
+        }
+
+        @if(selectedFiles.length > 0){
+        <div class="selected-files">
+          <h4>Selected Files</h4>
+          @for(file of selectedFiles; track $index){
+          <div class="file-item">
+            <span>{{ file.name }}</span>
+            <button type="button" class="remove-file" (click)="removeFile($index)">Remove</button>
+          </div>
+          }
+        </div>
+        }
+      </div>
+
+      @if(submitError){
+      <div class="alert alert-error" role="alert">{{ submitError }}</div>
+      }
+
+      @if(submitSuccess){
+      <div class="alert alert-success" role="status">{{ submitSuccess }}</div>
+      }
+
+      <button class="submit-btn" type="submit" [disabled]="isSubmitting">
+        {{ isSubmitting ? 'Sending Request...' : 'Request Project Help' }}
+      </button>
+
+    </form>
+
+  </div>
+
+</div>

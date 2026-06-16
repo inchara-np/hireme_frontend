@@ -1,0 +1,25 @@
+<div class="admin-layout">
+  <aside class="sidebar">
+    <div class="brand">
+      <img src="/logo.png" alt="Valahatti" class="brand-logo">
+      <div>
+        <span>Valahatti</span>
+        <small>Admin Panel</small>
+      </div>
+    </div>
+
+    <nav>
+      <a routerLink="/admin/dashboard" routerLinkActive="active">Dashboard</a>
+      <a routerLink="/admin/leads" routerLinkActive="active">Leads</a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <app-theme-toggle></app-theme-toggle>
+      <button type="button" class="logout" (click)="logout()">Logout</button>
+    </div>
+  </aside>
+
+  <main class="content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

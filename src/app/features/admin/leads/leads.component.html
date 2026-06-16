@@ -1,0 +1,75 @@
+<section class="leads-page">
+  <div class="page-header-row">
+    <div>
+      <h1>All Requests</h1>
+      <p class="subtitle">Every form submission from the website appears here.</p>
+    </div>
+    <button type="button" class="btn-refresh" (click)="loadLeads()" [disabled]="isLoading">
+      ↻ Refresh
+    </button>
+  </div>
+
+  <div class="filter-tabs">
+    @for(filter of filters; track filter.key){
+    <button
+      type="button"
+      class="filter-tab"
+      [class.active]="activeFilter === filter.key"
+      (click)="setFilter(filter.key)"
+    >
+      {{ filter.label }}
+      <span class="count">{{ countFor(filter.key) }}</span>
+    </button>
+    }
+  </div>
+
+  @if(isLoading){
+  <p class="loading">Loading requests...</p>
+  }
+
+  @if(errorMessage){
+  <div class="alert">{{ errorMessage }}</div>
+  }
+
+  @if(!isLoading && filteredLeads.length === 0){
+  <div class="empty-state card">
+    <p>No requests yet for this filter.</p>
+    <small>Submissions from Contact, Freelance, and Student Project forms will appear here.</small>
+  </div>
+  }
+
+  @if(filteredLeads.length > 0){
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Phone</th>
+          <th>Email</th>
+          <th>Type</th>
+          <th>Status</th>
+          <th>Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for(lead of filteredLeads; track lead.id){
+        <tr>
+          <td><strong>{{ lead.name }}</strong></td>
+          <td>
+            <a [href]="'tel:' + lead.phone" class="phone-link">{{ lead.phone }}</a>
+          </td>
+          <td>{{ lead.email }}</td>
+          <td><span class="type-badge">{{ formatType(lead.lead_type) }}</span></td>
+          <td><span class="status" [class]="'status-' + lead.status.toLowerCase()">{{ lead.status }}</span></td>
+          <td>{{ lead.created_at | date:'medium' }}</td>
+          <td>
+            <a [routerLink]="['/admin/leads', lead.id]" class="view-btn">View Details</a>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  }
+</section>

@@ -1,0 +1,18 @@
+.page-header {
+  padding: 80px 0 40px;
+  background: var(--hero-bg);
+  color: white;
+  text-align: center;
+}
+
+.page-header h1 {
+  margin: 0 0 16px;
+  font-size: 48px;
+}
+
+.page-header p {
+  margin: 0 auto;
+  max-width: 700px;
+  font-size: 18px;
+  opacity: 0.95;
+}

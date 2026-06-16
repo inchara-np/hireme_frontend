@@ -1,0 +1,66 @@
+<section class="lead-details-page">
+  <a routerLink="/admin/leads" class="back-link">← Back to leads</a>
+
+  @if(isLoading){
+  <p>Loading lead...</p>
+  }
+
+  @if(errorMessage){
+  <div class="alert">{{ errorMessage }}</div>
+  }
+
+  @if(lead){
+  <div class="card details-card">
+    <div class="header">
+      <h1>{{ lead.name }}</h1>
+      <span class="status">{{ lead.status }}</span>
+    </div>
+
+    <div class="grid">
+      <div><strong>Email:</strong> {{ lead.email }}</div>
+      <div><strong>Phone:</strong> {{ lead.phone }}</div>
+      <div><strong>Type:</strong> {{ lead.lead_type }}</div>
+      <div><strong>Company:</strong> {{ lead.company || '—' }}</div>
+      <div><strong>College:</strong> {{ lead.college_name || '—' }}</div>
+      <div><strong>Branch:</strong> {{ lead.branch || '—' }}</div>
+      <div><strong>Project:</strong> {{ lead.project_title || '—' }}</div>
+      <div><strong>Submission:</strong> {{ lead.submission_date || '—' }}</div>
+      <div><strong>Urgency:</strong> {{ lead.urgency || '—' }}</div>
+      <div><strong>Created:</strong> {{ lead.created_at | date:'medium' }}</div>
+    </div>
+
+    <div class="description">
+      <strong>Description</strong>
+      <p>{{ lead.description }}</p>
+    </div>
+
+    @if(lead.attachments.length){
+    <div class="attachments">
+      <strong>Attachments</strong>
+      <ul>
+        @for(file of lead.attachments; track file){
+        <li><a [href]="attachmentUrl(file)" target="_blank" rel="noopener">{{ file }}</a></li>
+        }
+      </ul>
+    </div>
+    }
+
+    <div class="status-update">
+      <label>Update Status</label>
+      <div class="status-row">
+        <select [(ngModel)]="selectedStatus">
+          @for(status of statusOptions; track status){
+          <option [value]="status">{{ status }}</option>
+          }
+        </select>
+        <button class="btn btn-primary" (click)="updateStatus()" [disabled]="isUpdating">
+          {{ isUpdating ? 'Updating...' : 'Save Status' }}
+        </button>
+      </div>
+      @if(successMessage){
+      <div class="success">{{ successMessage }}</div>
+      }
+    </div>
+  </div>
+  }
+</section>
