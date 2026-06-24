@@ -1,0 +1,16 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "hiremefrontend",
+  "compatibility_date": "2026-06-16",
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "directory": "dist/frontend/browser",
+    "not_found_handling": "single-page-application",
+    "html_handling": "auto-trailing-slash"
+  },
+  "compatibility_flags": [
+    "nodejs_compat"
+  ]
+}

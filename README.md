@@ -13,20 +13,23 @@ npm start
 
 Site: `http://localhost:4200` (proxies API to `localhost:8080`)
 
-## Production (Cloudflare Pages — free tier)
+## Production (Cloudflare Workers — free tier)
 
 ### 1. Deploy
 
-1. [Cloudflare Pages](https://dash.cloudflare.com) → **Create → Pages** → connect this repo
+1. [Cloudflare Dashboard](https://dash.cloudflare.com) → **Workers & Pages** → connect **hireme_frontend** repo
 2. Build settings:
 
 | Setting | Value |
 |---------|-------|
-| Build command | `npm install && npm run build` |
-| Output directory | `dist/frontend/browser` |
-| Node version | `20` |
+| Build command | `npm install && npm run deploy` |
+| Deploy command | *(leave empty if using `npm run deploy` in build)* |
 
-3. Deploy → you get `https://hireme-frontend.pages.dev` (or similar)
+Or set **Deploy command** to `npx wrangler deploy` with **Build command** `npm install && npm run build`.
+
+`wrangler.jsonc` handles SPA routing for `/admin/*` — do **not** add a `_redirects` file (Cloudflare rejects it).
+
+3. Deploy → you get `https://hiremefrontend.<account>.workers.dev`
 
 ### 2. Custom domain
 
