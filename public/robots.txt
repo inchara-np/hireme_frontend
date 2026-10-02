@@ -1,4 +1,4 @@
-# Valahatti Technologies — https://valahatti-tech.com
+# Valahatti Technologies — https://hireme-frontend.valahatti-tech.workers.dev
 #
 # The admin panel is client-rendered and behind a login, but it is still
 # disallowed here so crawlers do not waste budget on a shell that renders
@@ -9,4 +9,4 @@ User-agent: *
 Allow: /
 Disallow: /admin/
 
-Sitemap: https://valahatti-tech.com/sitemap.xml
+Sitemap: https://hireme-frontend.valahatti-tech.workers.dev/sitemap.xml

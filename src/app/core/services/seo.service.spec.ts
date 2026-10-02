@@ -90,11 +90,11 @@ describe('SeoService', () => {
       expect(canonicalHref()).toBe(`${origin}/freelance-services`);
     });
 
-    it('rewrites a different host onto the apex host', () => {
+    it('rewrites a different host onto the canonical host', () => {
       service.update({
         title: 't',
         description: 'd',
-        path: 'https://www.valahatti-tech.com/services?utm_source=x'
+        path: 'https://some-other-host.example.com/services?utm_source=x'
       });
 
       expect(canonicalHref()).toBe(`${origin}/services`);

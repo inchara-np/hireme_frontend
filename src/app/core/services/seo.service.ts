@@ -37,7 +37,7 @@ const DEFAULT_IMAGE_ALT =
  * Open Graph / Twitter card set in a single call.
  *
  * Canonical URLs are always built against the apex host configured in
- * `environment.siteUrl` (`https://valahatti-tech.com`), regardless of the host
+ * `environment.siteUrl` (`https://hireme-frontend.valahatti-tech.workers.dev`), regardless of the host
  * or query string the visitor arrived on. Cloudflare still needs a dashboard
  * redirect rule to send `www.` to the apex — see the README.
  */
@@ -48,7 +48,7 @@ export class SeoService {
   private readonly document = inject(DOCUMENT);
   private readonly structuredData = inject(StructuredDataService);
 
-  /** Apex origin with no trailing slash, e.g. `https://valahatti-tech.com`. */
+  /** Apex origin with no trailing slash, e.g. `https://hireme-frontend.valahatti-tech.workers.dev`. */
   private readonly origin = environment.siteUrl.replace(/\/+$/, '');
 
   update(config: SeoConfig): void {
