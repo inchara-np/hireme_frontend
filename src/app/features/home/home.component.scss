@@ -41,9 +41,9 @@
    accent appears outside a call to action. */
 .hero__title-accent {
   color: var(--text-primary);
-  white-space: nowrap;
   /* Painted as a background so it sits behind the glyphs without needing a
-     stacking-context hack that would fight the hero's layered background. */
+     stacking-context hack that would fight the hero's layered background.
+     `clone` repaints it per line box, so the underline survives wrapping. */
   background-image: linear-gradient(
     to top,
     color-mix(in srgb, var(--accent-400) 36%, transparent) 0.2em,
@@ -51,6 +51,8 @@
   );
   background-repeat: no-repeat;
   padding-inline: 0.04em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
 }
 
 .hero__lead {
@@ -441,10 +443,6 @@
 
 /* --------------------------- narrow phones --------------------------- */
 @include down($bp-xs) {
-  .hero__title-accent {
-    white-space: normal;
-  }
-
   .hero__actions .btn,
   .cta__actions .btn,
   .split__card-foot .btn {
