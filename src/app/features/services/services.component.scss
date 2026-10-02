@@ -1,52 +1,188 @@
-.services-page {
-  padding: 40px 0 80px;
-  background: var(--bg-page);
-}
+@use 'mixins' as *;
 
-.cards {
+.services__grid {
+  list-style: none;
+  margin: 0 0 var(--space-16);
+  padding: 0;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-}
+  gap: var(--space-5);
+  grid-template-columns: 1fr;
 
-.service-card .icon {
-  font-size: 32px;
-  display: block;
-  margin-bottom: 12px;
-}
+  @include up($bp-md) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 
-.cards h3 {
-  color: var(--accent-text);
-  margin-top: 0;
-}
-
-.link {
-  color: #2563eb;
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.bottom-cta {
-  margin-top: 48px;
-  text-align: center;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.bottom-cta h3 {
-  color: #1e3a8a;
-  margin-top: 0;
-}
-
-@media (max-width: 992px) {
-  .cards {
-    grid-template-columns: repeat(2, 1fr);
+  @include up($bp-lg) {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
   }
 }
 
-@media (max-width: 768px) {
-  .cards {
-    grid-template-columns: 1fr;
+.service {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: var(--space-5);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  transition: border-color var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out),
+    transform var(--dur-base) var(--ease-out);
+
+  @include up($bp-lg) {
+    grid-column: span 2;
+  }
+
+  &:hover {
+    border-color: var(--brand-300);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+/* The two headline services get more room, a softer radius and real
+   elevation, so the grid has a clear reading order instead of six
+   identical tiles. */
+.service--emphasis {
+  padding: clamp(1.5rem, 1.1rem + 1.4vw, 2.1rem);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  border-top: 3px solid var(--accent-400);
+
+  @include up($bp-lg) {
+    grid-column: span 3;
+  }
+
+  .service__title {
+    font-size: clamp(1.35rem, 1.18rem + 0.7vw, 1.7rem);
+  }
+
+  .service__summary {
+    font-size: var(--fs-lead);
+  }
+
+  &:hover {
+    box-shadow: var(--shadow-lg);
+  }
+}
+
+.service--emphasis + .service--emphasis {
+  border-top-color: var(--brand-500);
+}
+
+@include motion-safe {
+  .service--emphasis:hover {
+    transform: translateY(-3px);
+  }
+}
+
+.service__title {
+  font-size: var(--fs-h3);
+  margin-bottom: var(--space-3);
+}
+
+.service__summary {
+  font-size: var(--fs-sm);
+  margin-bottom: var(--space-4);
+  flex: 1;
+}
+
+.service--emphasis .service__summary {
+  flex: none;
+}
+
+.service__detail {
+  list-style: none;
+  margin: 0 0 var(--space-5);
+  padding: var(--space-4) 0 0;
+  border-top: 1px solid var(--border);
+  display: grid;
+  gap: 0.5rem;
+  flex: 1;
+
+  li {
+    position: relative;
+    margin: 0;
+    padding-left: 1.1rem;
+    font-size: var(--fs-sm);
+    color: var(--text-secondary);
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.62em;
+      width: 0.4rem;
+      height: 0.4rem;
+      border-radius: 50%;
+      background: var(--accent-400);
+    }
+  }
+}
+
+.service__link {
+  margin-top: auto;
+  align-self: flex-start;
+}
+
+/* ---------------------------- body copy ------------------------------- */
+/* The grid above is scannable but says almost nothing; these blocks carry
+   the explanatory prose. Rules rather than cards, so they read as an article
+   and do not compete with the service tiles. */
+.services__detail {
+  display: grid;
+  gap: var(--space-10);
+  margin-bottom: var(--space-16);
+  max-width: 72ch;
+}
+
+.services__block {
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--border);
+
+  h2 {
+    font-size: var(--fs-h3);
+    margin-bottom: var(--space-4);
+  }
+
+  p {
+    line-height: var(--lh-relaxed);
+  }
+
+  .link-arrow {
+    margin-top: var(--space-2);
+  }
+}
+
+/* ------------------------------ footer CTA ---------------------------- */
+.services__footer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-6);
+  padding: clamp(1.75rem, 1.3rem + 2.4vw, 3rem);
+
+  @include up($bp-md) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-10);
+  }
+}
+
+.services__footer-copy {
+  max-width: 44rem;
+
+  h2 {
+    margin-block: var(--space-3) var(--space-3);
+  }
+
+  p:last-child {
+    margin: 0;
+  }
+}
+
+@include down($bp-xs) {
+  .services__footer .btn {
+    width: 100%;
   }
 }

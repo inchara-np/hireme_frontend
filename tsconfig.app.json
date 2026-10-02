@@ -8,10 +8,12 @@
       "node"
     ]
   },
+  /* `src/server.ts` is gone: the app is prerendered to static assets and no
+     Node/Express server is built or deployed. `main.server.ts` stays because
+     the prerenderer needs it. See the SSR section of README.md. */
   "files": [
     "src/main.ts",
-    "src/main.server.ts",
-    "src/server.ts"
+    "src/main.server.ts"
   ],
   "include": [
     "src/**/*.d.ts"

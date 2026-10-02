@@ -1,9 +1,11 @@
 import { Component, inject } from '@angular/core';
-import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
-import { filter } from 'rxjs';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { filter, map, startWith } from 'rxjs';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
 import { FooterComponent } from './shared/components/footer/footer.component';
+import { WhatsAppButtonComponent } from './shared/components/whatsapp-button/whatsapp-button.component';
 import { ThemeService } from './core/services/theme.service';
 
 @Component({
@@ -12,25 +14,30 @@ import { ThemeService } from './core/services/theme.service';
   imports: [
     RouterOutlet,
     NavbarComponent,
-    FooterComponent
+    FooterComponent,
+    WhatsAppButtonComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  showPublicChrome = true;
-
   private readonly themeService = inject(ThemeService);
   private readonly router = inject(Router);
 
+  /**
+   * Public chrome (navbar, footer, WhatsApp button) is hidden inside `/admin`,
+   * which brings its own sidebar layout.
+   */
+  readonly showPublicChrome = toSignal(
+    this.router.events.pipe(
+      filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+      map((event) => !event.urlAfterRedirects.startsWith('/admin')),
+      startWith(!this.router.url.startsWith('/admin'))
+    ),
+    { initialValue: true }
+  );
+
   constructor() {
     this.themeService.initialize();
-
-    this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe((event) => {
-        const url = (event as NavigationEnd).urlAfterRedirects;
-        this.showPublicChrome = !url.startsWith('/admin');
-      });
   }
 }

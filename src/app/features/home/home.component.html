@@ -1,140 +1,227 @@
+<!-- ============================ HERO ============================ -->
 <section class="hero">
-  <div class="container">
-    <div class="hero-content">
-      <span class="tagline">Full-Stack Developer • Freelancer • Student Project Expert</span>
-      <h1>Turn Your Ideas Into Production-Ready Software</h1>
-      <p>
-        I help startups, businesses, and engineering students build reliable applications
-        with Golang, Angular, PostgreSQL, and modern cloud deployment — on time and within budget.
+  <div class="hero__grid-overlay" aria-hidden="true"></div>
+
+  <div class="container hero__inner">
+    <div class="hero__copy">
+      <p class="kicker">Software development studio</p>
+
+      <h1 class="hero__title">
+        Final year projects and custom web apps &mdash;
+        <span class="hero__title-accent">built properly, and actually finished.</span>
+      </h1>
+
+      <p class="hero__lead">
+        We build final year, mini and IEEE projects for engineering students, and custom
+        web applications for businesses and founders. Same engineers, same standard:
+        working code, real documentation, and a deployment that holds up after handover.
       </p>
-      <div class="hero-actions">
-        <a routerLink="/contact" [queryParams]="{ type: 'freelance' }" class="btn btn-primary">Hire Me as Freelancer</a>
-        <a routerLink="/contact" [queryParams]="{ type: 'business' }" class="btn btn-outline">Start a Project</a>
-        <a routerLink="/student-projects" class="btn btn-secondary">Get Project Help</a>
+
+      <div class="hero__actions">
+        <a routerLink="/student-projects" class="btn btn-accent btn-lg">
+          Get final year project help
+          <span class="arrow" aria-hidden="true">&rarr;</span>
+        </a>
+        <a routerLink="/freelance-services" class="btn btn-outline btn-lg">
+          Hire a freelance developer
+        </a>
       </div>
+
+      <p class="hero__trust">
+        Remote, for students and businesses anywhere in India &middot; Replies within 24 hours
+      </p>
     </div>
+
+    <aside class="hero__panel" aria-label="Technology stack">
+      <div class="hero__panel-head">
+        <span class="hero__panel-dot" aria-hidden="true"></span>
+        <span class="hero__panel-label">What we build with</span>
+      </div>
+      <ul class="hero__stack">
+        @for (tech of stack; track tech) {
+          <li class="chip">{{ tech }}</li>
+        }
+      </ul>
+      <p class="hero__panel-note">
+        Chosen because they are boring, fast and easy to hand over &mdash; not because they
+        are trending.
+      </p>
+    </aside>
   </div>
 </section>
 
-<section class="hire-paths">
+<!-- ======================= AUDIENCE SPLIT ======================= -->
+<!-- The site's whole job is to route two very different visitors, so the
+     split happens immediately below the fold rather than in a nav menu. -->
+<section class="section split">
   <div class="container">
-    <h2>How Can I Help You?</h2>
-    <div class="path-cards">
-      <div class="card path-card">
-        <span class="path-icon">💼</span>
-        <h3>Hire as Freelancer</h3>
-        <p>Need a dedicated developer for your product, MVP, or feature? I work on contract with weekly updates and milestone delivery.</p>
-        <ul>
-          <li>Backend & API development</li>
-          <li>Angular / full-stack apps</li>
-          <li>Bug fixes & code review</li>
+    <div class="section-head">
+      <p class="kicker">Two ways to work with us</p>
+      <h2>Academic project help, or a developer for hire</h2>
+      <p>Pick the track that matches you — each one goes to a form built for your situation.</p>
+    </div>
+
+    <div class="split__grid">
+
+      <article class="split__card split__card--student" appReveal>
+        <div class="split__card-top">
+          <span class="split__tag">For students</span>
+          <h3>Final year project help with source code</h3>
+          <p>
+            Mini, major, IEEE and research projects for BE, B.Tech, BCA, MCA and diploma
+            students across all branches. You get the implementation, the report and PPT
+            support, and a walkthrough so you can defend it confidently at your viva.
+          </p>
+        </div>
+
+        <ul class="split__list">
+          <li>Full source code, explained to you</li>
+          <li>Report, PPT and documentation support</li>
+          <li>Viva preparation walkthrough</li>
+          <li>Fast-track options for near deadlines</li>
         </ul>
-        <a routerLink="/freelance-services" class="link-btn">View Freelance Services →</a>
-      </div>
-      <div class="card path-card featured">
-        <span class="path-badge">Most Popular</span>
-        <span class="path-icon">🚀</span>
-        <h3>Build Your Project</h3>
-        <p>From requirement to deployment — I handle architecture, development, testing, and handover for businesses and startups.</p>
-        <ul>
-          <li>End-to-end development</li>
-          <li>Scalable architecture</li>
-          <li>Deployment & documentation</li>
+
+        <div class="split__card-foot">
+          <a routerLink="/student-projects" class="btn btn-accent">
+            Get final year project help
+          </a>
+          <span class="split__foot-note">Upload your synopsis if you have one</span>
+        </div>
+      </article>
+
+      <article class="split__card split__card--business" appReveal="90">
+        <div class="split__card-top">
+          <span class="split__tag split__tag--alt">For businesses &amp; founders</span>
+          <h3>Custom web application development</h3>
+          <p>
+            An MVP for a startup, a small-business website, a new feature, an API, or an
+            existing codebase that needs a hand. You work directly with the engineer
+            building it — no account managers in between.
+          </p>
+        </div>
+
+        <ul class="split__list">
+          <li>Hourly, fixed-scope or monthly retainer</li>
+          <li>Clear milestones and weekly progress</li>
+          <li>Code review and architecture consulting</li>
+          <li>Deployment, SSL and handover included</li>
         </ul>
-        <a routerLink="/contact" [queryParams]="{ type: 'business' }" class="link-btn">Get a Free Quote →</a>
-      </div>
-      <div class="card path-card">
-        <span class="path-icon">🎓</span>
-        <h3>Student Projects</h3>
-        <p>Hire us to build your final year, mini, major, or IEEE project — complete code, documentation, and viva support included.</p>
-        <ul>
-          <li>All branches supported</li>
-          <li>Report & PPT assistance</li>
-          <li>Fast delivery options</li>
-        </ul>
-        <a routerLink="/student-projects" class="link-btn">Get Project Help →</a>
-      </div>
+
+        <div class="split__card-foot">
+          <a routerLink="/freelance-services" class="btn btn-primary">
+            Hire a freelance full stack developer
+          </a>
+          <a routerLink="/contact" [queryParams]="{ type: 'business' }" class="link-arrow">
+            Or describe your project
+            <span class="arrow" aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
+      </article>
+
     </div>
   </div>
 </section>
 
-<section class="services-preview">
+<!-- ========================= CAPABILITIES ========================= -->
+<section class="section capabilities">
   <div class="container">
-    <h2>Technical Expertise</h2>
-    <div class="tech-grid">
-      <div class="tech-item">Golang / Gin</div>
-      <div class="tech-item">Angular 19</div>
-      <div class="tech-item">PostgreSQL</div>
-      <div class="tech-item">REST APIs</div>
-      <div class="tech-item">Docker</div>
-      <div class="tech-item">JWT Auth</div>
-      <div class="tech-item">SSR / SEO</div>
-      <div class="tech-item">Cloud Deploy</div>
+    <div class="capabilities__layout">
+      <div class="section-head capabilities__head">
+        <p class="kicker">Capabilities</p>
+        <h2>Custom web application development, end to end</h2>
+        <p>
+          A deliberately narrow stack, used end to end. If a project needs something outside
+          it, we'll say so rather than learn on your budget.
+        </p>
+        <a routerLink="/services" class="link-arrow">
+          Browse all development services
+          <span class="arrow" aria-hidden="true">&rarr;</span>
+        </a>
+      </div>
+
+      <ul class="capabilities__list">
+        @for (item of capabilities; track item.title; let i = $index) {
+          <li class="capability" [appReveal]="i * 70">
+            <span class="capability__index" aria-hidden="true">{{ i + 1 }}</span>
+            <div class="capability__body">
+              <h3>{{ item.title }}</h3>
+              <p>{{ item.body }}</p>
+            </div>
+          </li>
+        }
+      </ul>
     </div>
   </div>
 </section>
 
-<section class="process">
+<!-- ============================ AUDIENCES ============================ -->
+<!-- Prose, deliberately. The rest of this page is headings, cards and
+     buttons; this is the block that actually explains, in sentences, what
+     each audience receives — for a reader deciding, and for a crawler that
+     has almost no body copy to read otherwise. -->
+<section class="section audiences">
   <div class="container">
-    <h2>How It Works</h2>
-    <div class="steps">
-      <div class="step">
-        <span class="step-num">1</span>
-        <h3>Share Requirements</h3>
-        <p>Fill the form with your project idea, timeline, and budget.</p>
-      </div>
-      <div class="step">
-        <span class="step-num">2</span>
-        <h3>Get a Plan & Quote</h3>
-        <p>I review your needs and send a clear scope, timeline, and pricing within 24 hours.</p>
-      </div>
-      <div class="step">
-        <span class="step-num">3</span>
-        <h3>Build & Deliver</h3>
-        <p>Development with regular updates, testing, deployment, and full handover documentation.</p>
-      </div>
+    <div class="section-head">
+      <p class="kicker">In plain terms</p>
+      <h2>What you get, depending on who you are</h2>
+    </div>
+
+    <div class="audiences__grid">
+      @for (audience of audiences; track audience.heading; let i = $index) {
+        <article class="audience" [appReveal]="i * 80">
+          <h3>{{ audience.heading }}</h3>
+          <p>{{ audience.body }}</p>
+          <a [routerLink]="audience.linkPath" class="link-arrow">
+            {{ audience.linkLabel }}
+            <span class="arrow" aria-hidden="true">&rarr;</span>
+          </a>
+        </article>
+      }
     </div>
   </div>
 </section>
 
-<section class="why-us">
+<!-- ============================ PROCESS ============================ -->
+<section class="section process">
   <div class="container">
-    <h2>Why Clients Choose Me</h2>
-    <div class="why-grid">
-      <div>
-        <h3>Clean, Maintainable Code</h3>
-        <p>Production-quality code with proper structure, not quick hacks that break later.</p>
-      </div>
-      <div>
-        <h3>On-Time Delivery</h3>
-        <p>Clear milestones and weekly progress so you always know where the project stands.</p>
-      </div>
-      <div>
-        <h3>Direct Communication</h3>
-        <p>Work directly with the developer — no middlemen. Email support and quick response included.</p>
-      </div>
+    <div class="section-head section-head--center">
+      <p class="kicker">How it works</p>
+      <h2>From enquiry to handover in three steps</h2>
     </div>
+
+    <ol class="process__steps">
+      @for (step of steps; track step.n; let i = $index) {
+        <li class="process__step" [appReveal]="i * 90">
+          <span class="process__num" aria-hidden="true">{{ step.n }}</span>
+          <h3>{{ step.title }}</h3>
+          <p>{{ step.body }}</p>
+        </li>
+      }
+    </ol>
   </div>
 </section>
 
-<section class="stats-section">
+<!-- =========================== FINAL CTA =========================== -->
+<section class="section cta-section">
   <div class="container">
-    <div class="stats">
-      <div class="stat"><h3>50+</h3><span>Projects Delivered</span></div>
-      <div class="stat"><h3>5+</h3><span>Years Experience</span></div>
-      <div class="stat"><h3>100%</h3><span>Client Satisfaction</span></div>
-      <div class="stat"><h3>24h</h3><span>Response Time</span></div>
-    </div>
-  </div>
-</section>
-
-<section class="cta">
-  <div class="container">
-    <h2>Ready to Start?</h2>
-    <p>Let's discuss your project today. Free consultation — no commitment required.</p>
-    <div class="cta-actions">
-      <a routerLink="/contact" [queryParams]="{ type: 'freelance' }" class="btn">Hire Me Now</a>
-      <a routerLink="/contact" class="btn btn-outline-light">Contact Us</a>
+    <div class="panel-inverse cta">
+      <div class="cta__traces" aria-hidden="true"></div>
+      <div class="cta__content">
+        <p class="kicker">Next step</p>
+        <h2>Tell us what you're trying to build</h2>
+        <p>
+          One short form. You'll get a reply within 24 hours with scope, timeline and cost —
+          and no pressure to go ahead.
+        </p>
+        <div class="cta__actions">
+          <a routerLink="/student-projects" class="btn btn-accent btn-lg">
+            Final year project help
+          </a>
+          <a routerLink="/contact" [queryParams]="{ type: 'business' }" class="btn btn-on-dark btn-lg">
+            Request a quote
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </section>

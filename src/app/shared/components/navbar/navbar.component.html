@@ -1,32 +1,53 @@
-<nav class="navbar">
+<header class="nav" [class.nav--scrolled]="scrolled()" [class.nav--open]="menuOpen()">
+  <div class="nav__inner">
 
-  <a routerLink="/" class="logo">
-    <img src="/logo.png" alt="Valahatti Technologies" class="logo-img">
-    <div class="logo-text">
-      <span class="brand-main">Valahatti</span>
-      <span class="brand-sub">TECHNOLOGIES</span>
+    <a routerLink="/" class="brand" aria-label="Valahatti Technologies — home">
+      <img
+        src="logo.png"
+        alt=""
+        class="brand__mark"
+        width="40"
+        height="40"
+        fetchpriority="high"
+      >
+      <span class="brand__text">
+        <span class="brand__name">Valahatti</span>
+        <span class="brand__sub">Technologies</span>
+      </span>
+    </a>
+
+    <nav class="nav__links" id="primary-navigation" aria-label="Primary">
+      @for (item of navItems; track item.path) {
+        <a
+          [routerLink]="item.path"
+          routerLinkActive="is-active"
+          [routerLinkActiveOptions]="{ exact: !!item.exact }"
+          class="nav__link"
+        >{{ item.label }}</a>
+      }
+    </nav>
+
+    <div class="nav__actions">
+      <app-theme-toggle />
+      <a routerLink="/contact" class="btn btn-accent btn-sm nav__cta">Get a quote</a>
+
+      <button
+        type="button"
+        class="nav__toggle"
+        [class.is-open]="menuOpen()"
+        (click)="toggleMenu()"
+        [attr.aria-expanded]="menuOpen()"
+        aria-controls="primary-navigation"
+        [attr.aria-label]="menuOpen() ? 'Close navigation menu' : 'Open navigation menu'"
+      >
+        <span class="nav__toggle-bar"></span>
+        <span class="nav__toggle-bar"></span>
+        <span class="nav__toggle-bar"></span>
+      </button>
     </div>
-  </a>
-
-  <button
-    type="button"
-    class="menu-toggle"
-    [class.open]="menuOpen"
-    (click)="toggleMenu()"
-    aria-label="Toggle navigation menu"
-  >
-    <span></span>
-    <span></span>
-    <span></span>
-  </button>
-
-  <div class="nav-links" [class.open]="menuOpen">
-    <a routerLink="/" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
-    <a routerLink="/services" class="nav-link" routerLinkActive="active">Services</a>
-    <a routerLink="/student-projects" class="nav-link" routerLinkActive="active">Student Projects</a>
-    <a routerLink="/freelance-services" class="nav-link" routerLinkActive="active">Freelance</a>
-    <a routerLink="/contact" class="nav-link" routerLinkActive="active">Contact</a>
-    <app-theme-toggle></app-theme-toggle>
   </div>
+</header>
 
-</nav>
+@if (menuOpen()) {
+  <div class="nav__scrim" (click)="closeMenu()" aria-hidden="true"></div>
+}

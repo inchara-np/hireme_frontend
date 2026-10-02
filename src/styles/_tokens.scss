@@ -1,0 +1,338 @@
+/* =============================================================================
+   Valahatti Technologies — design tokens
+   -----------------------------------------------------------------------------
+   Single source of truth for colour, type, space, radius, shadow and motion.
+   Every component reads from these custom properties; no component should ever
+   hardcode a hex value.
+
+   Palette rationale
+   -----------------
+   The brand mark is a navy "V" cut by amber circuit traces. The system is built
+   from those two colours rather than around them:
+
+     - Signal Navy  (#183D89 is the mark's exact navy) carries structure,
+       surfaces and links.
+     - Circuit Amber (#F8A102 is the mark's exact amber) is reserved almost
+       entirely for calls to action, so "amber = do something" stays learnable.
+     - Neutrals are deliberately hue-biased toward 222deg (cool navy-slate)
+       instead of a flat grey, so white space reads as part of the brand.
+
+   Both ramps are defined for light and dark. Dark mode is not an inversion:
+   surfaces lift with lightness, the amber is desaturated slightly so it does
+   not vibrate on dark navy, and borders gain contrast.
+   ========================================================================== */
+
+:root,
+.light-theme {
+  /* --- brand: Signal Navy ------------------------------------------------ */
+  --brand-50:  #eef3fd;
+  --brand-100: #dbe6fa;
+  --brand-200: #b9ccf3;
+  --brand-300: #8dabe9;
+  --brand-400: #5b85d9;
+  --brand-500: #3060bf;
+  --brand-600: #1b47a0;
+  --brand-700: #183d89;  /* logo navy */
+  --brand-800: #142f68;
+  --brand-900: #0c1c40;
+  --brand-950: #070f24;
+
+  /* --- accent: Circuit Amber -------------------------------------------- */
+  --accent-50:  #fff8e8;
+  --accent-100: #ffedc4;
+  --accent-200: #ffdb8a;
+  --accent-300: #fdc34a;
+  --accent-400: #f8a102;  /* logo amber */
+  --accent-500: #dd8a00;
+  --accent-600: #b76e00;
+  --accent-700: #8d5405;
+  --accent-800: #6b400a;
+
+  /* --- neutrals: navy-biased slate (hue ~222) --------------------------- */
+  --neutral-0:   #ffffff;
+  --neutral-25:  #fbfcfe;
+  --neutral-50:  #f5f7fc;
+  --neutral-100: #eef1f8;
+  --neutral-200: #e0e5f0;
+  --neutral-300: #c9d1e2;
+  --neutral-400: #9aa5bf;
+  --neutral-500: #6f7b96;
+  --neutral-600: #515c75;
+  --neutral-700: #3a4459;
+  --neutral-800: #252e40;
+  --neutral-900: #151c2b;
+  --neutral-950: #0b0f1a;
+
+  /* --- semantic ---------------------------------------------------------- */
+  --success-bg:     #e7f6ef;
+  --success-border: #9fd9c1;
+  --success-fg:     #0a6b46;
+  --success-solid:  #0e8a5f;
+
+  --danger-bg:      #fdecec;
+  --danger-border:  #f3b6b6;
+  --danger-fg:      #a51f28;
+  --danger-solid:   #cf2c38;
+
+  --warning-bg:     #fff6e3;
+  --warning-border: #f5d79a;
+  --warning-fg:     #8a5a06;
+
+  --info-bg:        #e9f1fd;
+  --info-border:    #b7cef2;
+  --info-fg:        #17417f;
+
+  /* --- surfaces / text --------------------------------------------------- */
+  --bg-page:      var(--neutral-50);
+  --bg-surface:   var(--neutral-0);
+  --bg-subtle:    var(--neutral-100);
+  --bg-muted:     var(--neutral-200);
+  --bg-inverse:   var(--brand-950);
+  --bg-brand-soft: var(--brand-50);
+  --bg-accent-soft: var(--accent-50);
+
+  --text-primary:   var(--neutral-900);
+  --text-secondary: var(--neutral-600);
+  /* Not neutral-500: that only reaches 4.24:1 on white, and this colour is
+     used for hint text at 0.8rem, which still needs AA (4.5:1). This hits
+     5.4:1 on --bg-surface and 4.8:1 on --bg-subtle. */
+  --text-muted:     #5f6a85;
+  --text-inverse:   var(--neutral-0);
+  --text-on-accent: var(--brand-950);
+  --text-link:      var(--brand-600);
+  --text-link-hover: var(--brand-800);
+
+  --border:        var(--neutral-200);
+  --border-strong: var(--neutral-300);
+  --border-inverse: rgba(255, 255, 255, 0.16);
+
+  --input-bg:      var(--neutral-0);
+  --input-border:  var(--neutral-300);
+  --input-placeholder: var(--neutral-400);
+
+  /* --- signature surfaces ------------------------------------------------ */
+  --hero-bg: radial-gradient(
+      1100px 620px at 12% -10%,
+      rgba(27, 71, 160, 0.14),
+      transparent 60%
+    ),
+    radial-gradient(900px 520px at 92% 8%, rgba(248, 161, 2, 0.13), transparent 62%),
+    var(--neutral-25);
+  --hero-text: var(--neutral-900);
+  --hero-eyebrow: var(--brand-600);
+  --panel-inverse-bg: linear-gradient(152deg, var(--brand-950) 0%, var(--brand-800) 62%, var(--brand-700) 100%);
+  --grid-line: rgba(21, 28, 43, 0.055);
+  --circuit-line: rgba(248, 161, 2, 0.34);
+
+  --nav-bg: rgba(255, 255, 255, 0.82);
+  --nav-bg-solid: var(--neutral-0);
+  --nav-border: rgba(21, 28, 43, 0.08);
+  --nav-text: var(--neutral-700);
+  --nav-text-active: var(--brand-700);
+
+  --footer-bg: var(--brand-950);
+  --footer-text: rgba(255, 255, 255, 0.72);
+  --footer-heading: var(--neutral-0);
+
+  --sidebar-bg: linear-gradient(180deg, var(--brand-950), var(--brand-900));
+  --sidebar-text: rgba(255, 255, 255, 0.7);
+  --sidebar-text-active: var(--neutral-0);
+  --admin-bg: var(--neutral-50);
+
+  /* --- elevation --------------------------------------------------------- */
+  --shadow-xs: 0 1px 2px rgba(12, 28, 64, 0.06);
+  --shadow-sm: 0 1px 3px rgba(12, 28, 64, 0.07), 0 1px 2px rgba(12, 28, 64, 0.04);
+  --shadow-md: 0 6px 16px -4px rgba(12, 28, 64, 0.1), 0 2px 6px -2px rgba(12, 28, 64, 0.06);
+  --shadow-lg: 0 20px 40px -14px rgba(12, 28, 64, 0.2), 0 6px 14px -8px rgba(12, 28, 64, 0.1);
+  --shadow-xl: 0 36px 70px -20px rgba(12, 28, 64, 0.26);
+  --shadow-accent: 0 10px 26px -10px rgba(221, 138, 0, 0.55);
+  --shadow-brand: 0 10px 26px -10px rgba(27, 71, 160, 0.48);
+  --ring: 0 0 0 3px rgba(48, 96, 191, 0.35);
+  --ring-accent: 0 0 0 3px rgba(248, 161, 2, 0.45);
+}
+
+.dark-theme {
+  --brand-50:  #0a142c;
+  --brand-100: #0e1c3d;
+  --brand-200: #142a5c;
+  --brand-300: #1c3d84;
+  --brand-400: #2a57ad;
+  --brand-500: #3d74d1;
+  --brand-600: #5b90e4;
+  --brand-700: #86b0ee;
+  --brand-800: #b3cdf5;
+  --brand-900: #d9e6fb;
+  --brand-950: #eef4fe;
+
+  --accent-50:  #2a1d02;
+  --accent-100: #3d2a03;
+  --accent-200: #6b4805;
+  --accent-300: #a87008;
+  --accent-400: #f0a621;
+  --accent-500: #f8b743;
+  --accent-600: #fbcb74;
+  --accent-700: #fddda4;
+  --accent-800: #feeccd;
+
+  --neutral-0:   #0b1020;
+  --neutral-25:  #0d1324;
+  --neutral-50:  #0f1729;
+  --neutral-100: #151e34;
+  --neutral-200: #1e2942;
+  --neutral-300: #2b3855;
+  --neutral-400: #56658a;
+  --neutral-500: #8391b0;
+  --neutral-600: #a6b2cc;
+  --neutral-700: #c5cee1;
+  --neutral-800: #dee4f0;
+  --neutral-900: #f1f4fa;
+  --neutral-950: #ffffff;
+
+  --success-bg:     #0d2a20;
+  --success-border: #1d5842;
+  --success-fg:     #6fd8ac;
+  --success-solid:  #18a374;
+
+  --danger-bg:      #2d1114;
+  --danger-border:  #6a2229;
+  --danger-fg:      #f5a3a8;
+  --danger-solid:   #e04651;
+
+  --warning-bg:     #2c2007;
+  --warning-border: #5d4611;
+  --warning-fg:     #f3c778;
+
+  --info-bg:        #111f3a;
+  --info-border:    #29406b;
+  --info-fg:        #9dbdf0;
+
+  --bg-page:      #080d19;
+  --bg-surface:   #101827;
+  --bg-subtle:    #151e34;
+  --bg-muted:     #1b2439;
+  --bg-inverse:   #060a14;
+  --bg-brand-soft: rgba(61, 116, 209, 0.12);
+  --bg-accent-soft: rgba(240, 166, 33, 0.12);
+
+  --text-primary:   #f1f4fa;
+  --text-secondary: #a9b4ce;
+  --text-muted:     #8391b0;
+  --text-inverse:   #0b1020;
+  --text-on-accent: #1a1204;
+  --text-link:      #86b0ee;
+  --text-link-hover: #b3cdf5;
+
+  --border:        #1f2a43;
+  --border-strong: #2e3c5c;
+  --border-inverse: rgba(255, 255, 255, 0.12);
+
+  --input-bg:      #0e1626;
+  --input-border:  #2b3855;
+  --input-placeholder: #5b6883;
+
+  --hero-bg: radial-gradient(
+      1100px 620px at 10% -12%,
+      rgba(61, 116, 209, 0.22),
+      transparent 62%
+    ),
+    radial-gradient(900px 520px at 94% 6%, rgba(240, 166, 33, 0.12), transparent 60%),
+    #080d19;
+  --hero-text: #f1f4fa;
+  --hero-eyebrow: #86b0ee;
+  --panel-inverse-bg: linear-gradient(152deg, #070c18 0%, #101d3c 62%, #16305f 100%);
+  --grid-line: rgba(255, 255, 255, 0.045);
+  --circuit-line: rgba(240, 166, 33, 0.3);
+
+  --nav-bg: rgba(11, 16, 32, 0.8);
+  --nav-bg-solid: #0b1020;
+  --nav-border: rgba(255, 255, 255, 0.09);
+  --nav-text: #a9b4ce;
+  --nav-text-active: #86b0ee;
+
+  --footer-bg: #060a14;
+  --footer-text: rgba(255, 255, 255, 0.62);
+  --footer-heading: #f1f4fa;
+
+  --sidebar-bg: linear-gradient(180deg, #060a14, #0c1326);
+  --sidebar-text: rgba(255, 255, 255, 0.64);
+  --sidebar-text-active: #ffffff;
+  --admin-bg: #080d19;
+
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.5), 0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 6px 16px -4px rgba(0, 0, 0, 0.6), 0 2px 6px -2px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 20px 40px -14px rgba(0, 0, 0, 0.72), 0 6px 14px -8px rgba(0, 0, 0, 0.5);
+  --shadow-xl: 0 36px 70px -20px rgba(0, 0, 0, 0.8);
+  --shadow-accent: 0 10px 26px -10px rgba(240, 166, 33, 0.4);
+  --shadow-brand: 0 10px 26px -10px rgba(61, 116, 209, 0.45);
+  --ring: 0 0 0 3px rgba(91, 144, 228, 0.45);
+  --ring-accent: 0 0 0 3px rgba(240, 166, 33, 0.4);
+}
+
+/* Non-colour tokens are theme independent. */
+:root {
+  /* --- type -------------------------------------------------------------- */
+  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Public Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Menlo, monospace;
+
+  --fs-display: clamp(2.6rem, 1.55rem + 4.3vw, 4.5rem);
+  --fs-h1: clamp(2.05rem, 1.5rem + 2.5vw, 3.15rem);
+  --fs-h2: clamp(1.65rem, 1.32rem + 1.45vw, 2.45rem);
+  --fs-h3: clamp(1.22rem, 1.11rem + 0.5vw, 1.5rem);
+  --fs-h4: clamp(1.05rem, 1rem + 0.25vw, 1.18rem);
+  --fs-lead: clamp(1.05rem, 0.99rem + 0.3vw, 1.22rem);
+  --fs-body: 1rem;
+  --fs-sm: 0.9rem;
+  --fs-xs: 0.8rem;
+  --fs-kicker: 0.76rem;
+
+  --lh-tight: 1.08;
+  --lh-snug: 1.2;
+  --lh-normal: 1.55;
+  --lh-relaxed: 1.7;
+
+  --tracking-tight: -0.022em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.06em;
+  --tracking-kicker: 0.14em;
+
+  /* --- space (4px base) -------------------------------------------------- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+  --section-y: clamp(3.5rem, 2.2rem + 5vw, 6.5rem);
+  --container: 1200px;
+  --container-narrow: 840px;
+  --gutter: clamp(1rem, 0.6rem + 1.6vw, 2rem);
+
+  /* --- radius: deliberately varied by hierarchy -------------------------- */
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-pill: 999px;
+
+  /* --- motion ------------------------------------------------------------ */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.35, 0.64, 1);
+  --dur-fast: 140ms;
+  --dur-base: 220ms;
+  --dur-slow: 420ms;
+
+  --nav-height: 4.25rem;
+
+  --z-nav: 100;
+  --z-overlay: 200;
+  --z-toast: 300;
+}

@@ -1,159 +1,384 @@
-<div class="student-project-page">
+<app-page-header
+  kicker="For students"
+  title="Final year project help with source code, report and PPT"
+  subtitle="Mini, major, IEEE-based and research projects for BE, B.Tech, BCA, MCA and diploma students across every branch. You get working code, the documentation your department asks for, and a walkthrough so the viva isn't a guessing game."
+/>
 
-  <div class="form-container">
+<section class="section sp">
+  <div class="container sp__layout">
 
-    <div class="form-header">
-      <h1>Get Your Academic Project Done</h1>
+    <!-- ---------------------------- form ---------------------------- -->
+    <form
+      [formGroup]="projectForm"
+      (ngSubmit)="submit()"
+      class="sp__form"
+      novalidate
+      aria-labelledby="sp-form-heading"
+    >
+      <h2 id="sp-form-heading" class="sp__form-title">Tell us about your project</h2>
+      <p class="sp__form-note">
+        Fields marked <span class="req" aria-hidden="true">*</span> are required. It takes about
+        two minutes.
+      </p>
+
+      <!-- Step 1 -->
+      <fieldset class="sp__fieldset">
+        <legend class="sp__legend"><span class="sp__legend-num">01</span> About you</legend>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="sp-name">
+              Full name <span class="req" aria-hidden="true">*</span>
+            </label>
+            <input id="sp-name" type="text" class="form-control" formControlName="name"
+            (blur)="trimField('name')"
+              placeholder="Your full name" autocomplete="name"
+              [class.is-invalid]="isInvalid('name')"
+              [attr.aria-invalid]="isInvalid('name')">
+            @if (isInvalid('name')) {
+              <small class="field-error">{{ getError('name') }}</small>
+            }
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="sp-email">
+              Email <span class="req" aria-hidden="true">*</span>
+            </label>
+            <input id="sp-email" type="email" class="form-control" formControlName="email"
+            (blur)="trimField('email')"
+              placeholder="you@example.com" autocomplete="email" inputmode="email"
+              [class.is-invalid]="isInvalid('email')"
+              [attr.aria-invalid]="isInvalid('email')">
+            @if (isInvalid('email')) {
+              <small class="field-error">{{ getError('email') }}</small>
+            }
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="sp-phone">
+              Phone <span class="req" aria-hidden="true">*</span>
+            </label>
+            <input id="sp-phone" type="tel" class="form-control" formControlName="phone"
+              placeholder="10-digit mobile number" maxlength="10" inputmode="numeric"
+              autocomplete="tel-national"
+              [class.is-invalid]="isInvalid('phone')"
+              [attr.aria-invalid]="isInvalid('phone')">
+            @if (isInvalid('phone')) {
+              <small class="field-error">{{ getError('phone') }}</small>
+            } @else {
+              <small class="field-hint">We follow up on WhatsApp.</small>
+            }
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="sp-college">
+              College <span class="req" aria-hidden="true">*</span>
+            </label>
+            <input id="sp-college" type="text" class="form-control" formControlName="college"
+            (blur)="trimField('college')"
+              placeholder="Your college name" autocomplete="organization"
+              [class.is-invalid]="isInvalid('college')"
+              [attr.aria-invalid]="isInvalid('college')">
+            @if (isInvalid('college')) {
+              <small class="field-error">{{ getError('college') }}</small>
+            }
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="sp-branch">
+              Branch <span class="req" aria-hidden="true">*</span>
+            </label>
+            <select id="sp-branch" class="form-control" formControlName="branch"
+              [class.is-invalid]="isInvalid('branch')"
+              [attr.aria-invalid]="isInvalid('branch')">
+              <option value="">Select your branch</option>
+              @for (option of branchOptions; track option.value) {
+                <option [value]="option.value">{{ option.label }}</option>
+              }
+            </select>
+            @if (isInvalid('branch')) {
+              <small class="field-error">{{ getError('branch') }}</small>
+            }
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- Step 2 -->
+      <fieldset class="sp__fieldset">
+        <legend class="sp__legend"><span class="sp__legend-num">02</span> The project</legend>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="sp-projectType">
+              Project type <span class="req" aria-hidden="true">*</span>
+            </label>
+            <select id="sp-projectType" class="form-control" formControlName="projectType"
+              [class.is-invalid]="isInvalid('projectType')"
+              [attr.aria-invalid]="isInvalid('projectType')">
+              <option value="">Select project type</option>
+              @for (option of projectTypeOptions; track option.value) {
+                <option [value]="option.value">{{ option.label }}</option>
+              }
+            </select>
+            @if (isInvalid('projectType')) {
+              <small class="field-error">{{ getError('projectType') }}</small>
+            }
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="sp-expectedSubmissionDate">
+              Submission date <span class="req" aria-hidden="true">*</span>
+            </label>
+            <input id="sp-expectedSubmissionDate" type="date" class="form-control"
+              formControlName="expectedSubmissionDate" [min]="minDate"
+              [class.is-invalid]="isInvalid('expectedSubmissionDate')"
+              [attr.aria-invalid]="isInvalid('expectedSubmissionDate')">
+            @if (isInvalid('expectedSubmissionDate')) {
+              <small class="field-error">{{ getError('expectedSubmissionDate') }}</small>
+            } @else {
+              <small class="field-hint">When your college needs it.</small>
+            }
+          </div>
+
+          <div class="form-group form-group--full">
+            <label class="form-label" for="sp-urgency">
+              How soon do you need it? <span class="req" aria-hidden="true">*</span>
+            </label>
+            <select id="sp-urgency" class="form-control" formControlName="urgency"
+              [class.is-invalid]="isInvalid('urgency')"
+              [attr.aria-invalid]="isInvalid('urgency')">
+              <option value="">Select a timeline</option>
+              @for (option of urgencyOptions; track option.value) {
+                <option [value]="option.value">{{ option.label }}</option>
+              }
+            </select>
+            @if (isInvalid('urgency')) {
+              <small class="field-error">{{ getError('urgency') }}</small>
+            }
+          </div>
+
+          <div class="form-group form-group--full">
+            <label class="form-label" for="sp-description">
+              Your project idea or requirement <span class="req" aria-hidden="true">*</span>
+            </label>
+            <textarea id="sp-description" rows="6" class="form-control"
+              formControlName="description"
+              placeholder="Describe the domain, technology you'd prefer, and anything your guide has specified. No idea yet? Say so — we'll suggest options that fit your branch."
+              [class.is-invalid]="isInvalid('description')"
+              [attr.aria-invalid]="isInvalid('description')"></textarea>
+            <div class="sp__meta">
+              @if (isInvalid('description')) {
+                <small class="field-error">{{ getError('description') }}</small>
+              } @else {
+                <small class="field-hint">Don't worry about getting this perfect.</small>
+              }
+              <small class="char-count">{{ descriptionLength }} / 5000</small>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- Step 3 -->
+      <fieldset class="sp__fieldset">
+        <legend class="sp__legend">
+          <span class="sp__legend-num">03</span> Attachments <span class="sp__legend-opt">optional</span>
+        </legend>
+
+        <p class="sp__upload-info">
+          Synopsis, abstract, guidelines, an IEEE paper, or anything your guide gave you.
+        </p>
+
+        <label class="sp__dropzone" for="sp-files">
+          <span class="sp__dropzone-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 16V4" />
+              <path d="m7.5 8.5 4.5-4.5 4.5 4.5" />
+              <path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3" />
+            </svg>
+          </span>
+          <span class="sp__dropzone-text">
+            <strong>Choose files</strong>
+            <small>PDF, DOC, DOCX, PPT, PPTX or ZIP — up to {{ maxFiles }} files, 10 MB each</small>
+          </span>
+          <input id="sp-files" type="file" multiple class="sp__file-input"
+            [accept]="acceptAttr" (change)="onFilesSelected($event)">
+        </label>
+
+        @if (fileError()) {
+          <small class="field-error sp__file-error">{{ fileError() }}</small>
+        }
+
+        @if (selectedFiles().length) {
+          <ul class="sp__files">
+            @for (file of selectedFiles(); track file.name + file.size; let i = $index) {
+              <li class="sp__file">
+                <span class="sp__file-name">{{ file.name }}</span>
+                <span class="sp__file-size">{{ formatSize(file.size) }}</span>
+                <button type="button" class="sp__file-remove" (click)="removeFile(i)"
+                  [attr.aria-label]="'Remove ' + file.name">Remove</button>
+              </li>
+            }
+          </ul>
+        }
+      </fieldset>
+
+      <div class="sp__feedback">
+        <app-alert tone="error" [message]="submitError()" title="Request not sent" />
+        <app-alert tone="success" [message]="submitSuccess()" title="Request received" />
+      </div>
+
+      <button type="submit" class="btn btn-accent btn-lg sp__submit" [disabled]="isSubmitting()">
+        @if (isSubmitting()) {
+          <span class="spinner" aria-hidden="true"></span>
+          Sending your request…
+        } @else {
+          Request project help
+        }
+      </button>
+    </form>
+
+    <!-- --------------------------- aside ---------------------------- -->
+    <aside class="sp__aside" aria-label="What you get">
+      <div class="sp__card">
+        <p class="kicker">What you get</p>
+        <h2 class="sp__aside-title">Everything your submission needs</h2>
+        <ul class="sp__deliverables">
+          @for (item of deliverables; track item) {
+            <li>{{ item }}</li>
+          }
+        </ul>
+      </div>
+
+      <div class="sp__card sp__card--muted">
+        <h3 class="sp__aside-sub">Deadline this week?</h3>
+        <p>
+          Say so in the timeline field. Fast-track slots are limited, but we'll tell you
+          straight away whether it's realistic rather than promising and missing.
+        </p>
+      </div>
+
+      <div class="sp__card sp__card--muted">
+        <h3 class="sp__aside-sub">Not an academic project?</h3>
+        <p>
+          If you're building something commercial rather than for a department submission,
+          the other half of the studio does that.
+        </p>
+        <a routerLink="/freelance-services" class="link-arrow">
+          Hire a freelance full stack developer
+          <span class="arrow" aria-hidden="true">&rarr;</span>
+        </a>
+      </div>
+    </aside>
+
+  </div>
+</section>
+
+<!-- ====================== WHAT'S INCLUDED ======================= -->
+<section class="section sp-info">
+  <div class="container">
+    <div class="section-head">
+      <p class="kicker">What's included</p>
+      <h2>What a final year project from us actually includes</h2>
       <p>
-        Hire us to build your mini, major, or IEEE project. Share your requirements and
-        we'll handle implementation, documentation, and delivery — you focus on your viva.
+        Whatever your college calls it — mini project, major project, final year project
+        or an IEEE-based project — the delivery is the same four things, and you get all
+        four rather than picking from a menu.
       </p>
     </div>
 
-    <form [formGroup]="projectForm" (ngSubmit)="submit()" novalidate>
-
-      <div class="form-grid">
-
-        <div class="form-group">
-          <label>Full Name *</label>
-          <input type="text" placeholder="Enter your full name" formControlName="name" [class.invalid]="isInvalid('name')">
-          @if(isInvalid('name')){
-          <small class="field-error">{{ getError('name') }}</small>
-          }
-        </div>
-
-        <div class="form-group">
-          <label>Email *</label>
-          <input type="email" placeholder="Enter your email" formControlName="email" [class.invalid]="isInvalid('email')">
-          @if(isInvalid('email')){
-          <small class="field-error">{{ getError('email') }}</small>
-          }
-        </div>
-
-        <div class="form-group">
-          <label>Phone Number *</label>
-          <input type="tel" placeholder="10-digit mobile number" formControlName="phone" maxlength="10" [class.invalid]="isInvalid('phone')">
-          @if(isInvalid('phone')){
-          <small class="field-error">{{ getError('phone') }}</small>
-          }
-        </div>
-
-        <div class="form-group">
-          <label>College Name *</label>
-          <input type="text" placeholder="Enter college name" formControlName="college" [class.invalid]="isInvalid('college')">
-          @if(isInvalid('college')){
-          <small class="field-error">{{ getError('college') }}</small>
-          }
-        </div>
-
-        <div class="form-group">
-          <label>Branch *</label>
-          <select formControlName="branch" [class.invalid]="isInvalid('branch')">
-            <option value="">Select Branch</option>
-            <option value="CSE">Computer Science</option>
-            <option value="ISE">Information Science</option>
-            <option value="ECE">Electronics & Communication</option>
-            <option value="EEE">Electrical & Electronics</option>
-            <option value="ME">Mechanical</option>
-            <option value="CV">Civil</option>
-            <option value="AIML">AI & ML</option>
-          </select>
-          @if(isInvalid('branch')){
-          <small class="field-error">{{ getError('branch') }}</small>
-          }
-        </div>
-
-        <div class="form-group">
-          <label>Project Type *</label>
-          <select formControlName="projectType" [class.invalid]="isInvalid('projectType')">
-            <option value="">Select Project Type</option>
-            <option value="mini">Mini Project</option>
-            <option value="major">Major Project</option>
-            <option value="ieee">IEEE Project</option>
-            <option value="research">Research Project</option>
-            <option value="internship">Internship Project</option>
-          </select>
-          @if(isInvalid('projectType')){
-          <small class="field-error">{{ getError('projectType') }}</small>
-          }
-        </div>
-
-        <div class="form-group">
-          <label>Project Submission Date *</label>
-          <input type="date" formControlName="expectedSubmissionDate" [class.invalid]="isInvalid('expectedSubmissionDate')">
-          @if(isInvalid('expectedSubmissionDate')){
-          <small class="field-error">{{ getError('expectedSubmissionDate') }}</small>
-          }
-        </div>
-
-        <div class="form-group">
-          <label>Project Urgency *</label>
-          <select formControlName="urgency" [class.invalid]="isInvalid('urgency')">
-            <option value="">Select Project Urgency</option>
-            <option value="1_week">Need Within 1 Week</option>
-            <option value="2_weeks">Need Within 2 Weeks</option>
-            <option value="1_month">Need Within 1 Month</option>
-            <option value="flexible">Flexible Timeline</option>
-          </select>
-          @if(isInvalid('urgency')){
-          <small class="field-error">{{ getError('urgency') }}</small>
-          }
-        </div>
-
-      </div>
-
-      <div class="form-group">
-        <label>Project Requirement / Idea *</label>
-        <textarea rows="6"
-          placeholder="Tell us about your project idea, domain, technology preference, or simply mention if you need us to suggest and develop a project for you."
-          formControlName="description"
-          [class.invalid]="isInvalid('description')">
-        </textarea>
-        @if(isInvalid('description')){
-        <small class="field-error">{{ getError('description') }}</small>
-        }
-      </div>
-
-      <div class="upload-section">
-        <h3>Supporting Documents</h3>
-        <p class="upload-info">
-          Upload synopsis, project requirements, diagrams,
-          screenshots, reference documents or project guidelines.
-        </p>
-        <input type="file" multiple (change)="onFilesSelected($event)" accept=".pdf,.doc,.docx,.ppt,.pptx,.zip">
-        <small class="help-text">Supported formats: PDF, DOC, DOCX, PPT, PPTX, ZIP (max 10 MB each)</small>
-
-        @if(fileError){
-        <small class="field-error">{{ fileError }}</small>
-        }
-
-        @if(selectedFiles.length > 0){
-        <div class="selected-files">
-          <h4>Selected Files</h4>
-          @for(file of selectedFiles; track $index){
-          <div class="file-item">
-            <span>{{ file.name }}</span>
-            <button type="button" class="remove-file" (click)="removeFile($index)">Remove</button>
-          </div>
-          }
-        </div>
-        }
-      </div>
-
-      @if(submitError){
-      <div class="alert alert-error" role="alert">{{ submitError }}</div>
+    <div class="sp-info__grid">
+      @for (item of included; track item.title) {
+        <article class="sp-info__item">
+          <h3>{{ item.title }}</h3>
+          <p>{{ item.body }}</p>
+        </article>
       }
-
-      @if(submitSuccess){
-      <div class="alert alert-success" role="status">{{ submitSuccess }}</div>
-      }
-
-      <button class="submit-btn" type="submit" [disabled]="isSubmitting">
-        {{ isSubmitting ? 'Sending Request...' : 'Request Project Help' }}
-      </button>
-
-    </form>
-
+    </div>
   </div>
+</section>
 
-</div>
+<!-- ========================== BRANCHES ========================== -->
+<section class="section sp-branches">
+  <div class="container">
+    <div class="section-head">
+      <p class="kicker">Scope</p>
+      <h2>Mini, major and IEEE projects, across branches</h2>
+    </div>
+
+    <div class="sp-prose">
+      <p>
+        Most of what we build is software: web applications, dashboards, REST APIs,
+        machine-learning models wrapped in an interface somebody can actually use, and IoT
+        projects where a device reports into a web backend. That covers the bulk of CSE,
+        IT, ISE, AI/ML, data science, MCA, BCA and MSc requirements, and the software half
+        of ECE, EEE and mechatronics projects where hardware feeds a dashboard.
+      </p>
+      <p>
+        If your guide has already fixed the domain, or handed you an IEEE paper, send it
+        across. We will read it and tell you plainly which parts are reproducible in the
+        time you have and which depend on a dataset or a piece of hardware you are
+        unlikely to get hold of. If you have no idea yet, say that instead — it is a
+        completely normal starting point, and we will come back with two or three options
+        that suit your branch, your skill level and your submission date rather than
+        whatever is quickest for us to build.
+      </p>
+
+      <ul class="sp-branches__chips">
+        @for (shape of projectShapes; track shape) {
+          <li class="chip">{{ shape }}</li>
+        }
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- =========================== PROCESS ========================== -->
+<section class="section sp-process">
+  <div class="container">
+    <div class="section-head">
+      <p class="kicker">How it works</p>
+      <h2>Academic project development, step by step</h2>
+    </div>
+
+    <ol class="sp-process__steps">
+      @for (step of process; track step.title) {
+        <li class="sp-process__step">
+          <h3>{{ step.title }}</h3>
+          <p>{{ step.body }}</p>
+        </li>
+      }
+    </ol>
+
+    <div class="sp-prose sp-process__note">
+      <h3>One thing we won't do</h3>
+      <p>
+        We won't pretend you built something you have never looked at. The walkthrough and
+        the commented code exist precisely so you can stand in front of an examiner and
+        account for every decision in the project. If you want to write part of it
+        yourself — a module, the report, the front end — tell us which part, and we will
+        leave it to you and review it instead of replacing it.
+      </p>
+      <p>
+        Still comparing options? The
+        <a routerLink="/services">full list of development services</a> shows everything
+        the studio takes on, students and businesses both.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= FAQ ============================ -->
+<section class="section sp-faq">
+  <div class="container">
+    <div class="section-head">
+      <p class="kicker">FAQ</p>
+      <h2>Final year project questions, answered</h2>
+      <p>
+        The eight things students ask us most often, before they ask about price.
+      </p>
+    </div>
+
+    <app-faq [items]="faqs" />
+  </div>
+</section>

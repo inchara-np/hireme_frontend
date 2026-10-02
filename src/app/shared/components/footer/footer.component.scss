@@ -1,82 +1,214 @@
-.site-footer {
+@use 'mixins' as *;
+
+.footer {
+  position: relative;
   background: var(--footer-bg);
-  color: rgba(255, 255, 255, 0.85);
-  padding: 48px 48px 24px;
+  color: var(--footer-text);
+  padding-top: var(--space-16);
+  margin-top: var(--space-16);
+
+  /* Thin amber rule echoing the circuit traces in the logo. */
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto;
+    height: 3px;
+    background: linear-gradient(
+      90deg,
+      var(--accent-400) 0%,
+      var(--accent-400) 22%,
+      transparent 22%,
+      transparent 100%
+    );
+  }
 }
 
-.footer-content {
-  max-width: 1280px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 32px;
-  padding-bottom: 32px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+.footer__inner {
+  display: grid;
+  gap: var(--space-10);
+  grid-template-columns: 1fr;
+  padding-bottom: var(--space-12);
+
+  @include up($bp-sm) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @include up($bp-lg) {
+    grid-template-columns: 1.6fr 1fr 1fr 1.3fr;
+    gap: var(--space-8);
+  }
 }
 
-.footer-brand strong {
-  font-size: 20px;
-  display: block;
-  margin-bottom: 8px;
-}
-
-.footer-brand p {
-  margin: 0;
-  opacity: 0.7;
-  font-size: 14px;
-}
-
-.footer-links {
-  display: flex;
-  gap: 24px;
-  flex-wrap: wrap;
-}
-
-.footer-links a {
-  color: rgba(255, 255, 255, 0.85);
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.2s;
-}
-
-.footer-links a:hover {
-  color: #f59e0b;
-}
-
-.footer-bottom {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding-top: 20px;
-  display: flex;
-  justify-content: space-between;
+.footer__logo {
+  display: inline-flex;
   align-items: center;
-  font-size: 14px;
-  opacity: 0.7;
+  gap: 0.6rem;
+  text-decoration: none;
+  margin-bottom: var(--space-4);
+  border-radius: var(--radius-sm);
+
+  img {
+    width: 2.25rem;
+    height: 2.25rem;
+    object-fit: contain;
+  }
+
+  @include focus-visible(var(--accent-400));
 }
 
-.admin-link {
+.footer__name {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--footer-heading);
+  line-height: 1.1;
+}
+
+.footer__sub {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-400);
+  margin-top: 0.2rem;
+}
+
+.footer__pitch {
+  max-width: 34ch;
+  font-size: var(--fs-sm);
+  color: var(--footer-text);
+  margin-bottom: var(--space-3);
+}
+
+.footer__note {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+}
+
+.footer__heading {
+  font-family: var(--font-mono);
+  font-size: var(--fs-kicker);
+  font-weight: 500;
+  letter-spacing: var(--tracking-kicker);
+  text-transform: uppercase;
+  color: var(--footer-heading);
+  margin: 0 0 var(--space-4);
+}
+
+.footer__col ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.footer__col li {
+  margin: 0;
+}
+
+.footer__col a {
+  font-size: var(--fs-sm);
+  color: var(--footer-text);
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease-out);
+  border-radius: var(--radius-xs);
+
+  &:hover {
+    color: #fff;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  @include focus-visible(var(--accent-400));
+}
+
+.footer__contact-note {
+  font-size: var(--fs-sm);
+  color: var(--footer-text);
+  margin-bottom: var(--space-4);
+  max-width: 30ch;
+}
+
+.footer__cta {
+  margin-bottom: var(--space-3);
+}
+
+.footer__direct {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-2);
+
+  li {
+    margin: 0;
+  }
+}
+
+/* The published address. Mono because it is an identifier, not prose, and
+   `anywhere` so it cannot overflow the narrow footer column on a phone. */
+.footer__email {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--footer-text);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+  border-radius: var(--radius-xs);
+
+  &:hover {
+    color: #fff;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  @include focus-visible(var(--accent-400));
+}
+
+.footer__whatsapp {
+  display: block;
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  color: var(--accent-300);
+  text-decoration: none;
+  border-radius: var(--radius-xs);
+
+  &:hover {
+    color: var(--accent-200);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  @include focus-visible(var(--accent-400));
+}
+
+.footer__bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-block: var(--space-5);
+  border-top: 1px solid var(--border-inverse);
+  font-size: var(--fs-xs);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.footer__admin {
   color: rgba(255, 255, 255, 0.5);
   text-decoration: none;
-  font-size: 13px;
-}
+  border-radius: var(--radius-xs);
 
-.admin-link:hover {
-  color: rgba(255, 255, 255, 0.8);
-}
-
-@media (max-width: 768px) {
-  .site-footer {
-    padding: 32px 20px 20px;
+  &:hover {
+    color: rgba(255, 255, 255, 0.85);
   }
 
-  .footer-content {
-    flex-direction: column;
-  }
-
-  .footer-bottom {
-    flex-direction: column;
-    gap: 8px;
-    text-align: center;
-  }
+  @include focus-visible(var(--accent-400));
 }

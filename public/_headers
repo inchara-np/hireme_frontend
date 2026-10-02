@@ -1,0 +1,76 @@
+# Cloudflare Workers static-asset headers.
+# Consumed by Cloudflare at deploy time; never served to visitors.
+#
+# Rules are evaluated top to bottom and later matches win for the same header
+# name, so the broad /* block sets the baseline and the specific blocks below
+# override caching for fingerprinted assets.
+#
+# The `script-src` hashes below cover the three inline scripts that end up in
+# the prerendered HTML:
+#   1. the theme bootstrap in src/index.html (prevents a white flash),
+#   2. Angular's `ng-event-dispatch-contract` runtime (withEventReplay()),
+#   3. the per-page `__jsaction_bootstrap(...)` call, whose contents depend on
+#      which DOM events that page's template actually binds.
+# Because (3) differs per page and changes whenever templates change,
+# `npm run build` regenerates this directive automatically into
+# dist/frontend/browser/_headers via tools/csp-hashes.js. If you ever hand-edit
+# templates and deploy without a fresh build, re-run `npm run csp:hashes`.
+#
+# Outbound WhatsApp links (https://wa.me/...) are ordinary top-level
+# navigations. CSP has no shipped directive that restricts those
+# (`navigate-to` was never implemented by browsers), so no allowance is needed
+# — the links work under this policy as written.
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  X-Frame-Options: DENY
+  Permissions-Policy: accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=(), interest-cohort=()
+  Cross-Origin-Opener-Policy: same-origin
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-ZKQG9Z7CmRdR8AIZiyj8T1vA+Q2IM3XAyOrMZnZMVZI=' 'sha256-VM2mZqyEQZoLzoTrp5EigFvzQ0+f1wSeBuoOn95WHCg=' 'sha256-WAFInstuijDmkdZL9gTCFeDmZQw9HbGd+IA1OUdNqjo=' 'sha256-8sGKvDKC8crv9OBcqEMvqrNDWlm1/80h7NJpJzqOnLI=' 'sha256-YR5UaeMJmcF2QvNpSDX5Em8xm7vOc4QqcnkdA1JMBlM='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://api.valahatti-tech.com; connect-src 'self' https://api.valahatti-tech.com; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; manifest-src 'self'; worker-src 'self' blob:; upgrade-insecure-requests
+  Cache-Control: public, max-age=0, must-revalidate
+
+# --- fingerprinted build output: safe to cache forever ---------------------
+# Angular emits content-hashed filenames (main-E445K4RE.js, styles-XXXX.css),
+# so a changed file is always a changed URL.
+/*.js
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.css
+  Cache-Control: public, max-age=31536000, immutable
+
+/media/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# --- static brand assets: long-lived but revalidated ------------------------
+# These keep stable filenames, so they get a week rather than a year.
+/*.png
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+/*.ico
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+/*.svg
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+/*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+
+# --- documents that must never be served stale ------------------------------
+/
+  Cache-Control: public, max-age=0, must-revalidate
+
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/robots.txt
+  Cache-Control: public, max-age=3600
+
+/sitemap.xml
+  Cache-Control: public, max-age=3600
+
+# --- admin: never cached, never indexed -------------------------------------
+/admin/*
+  Cache-Control: no-store
+  X-Robots-Tag: noindex, nofollow

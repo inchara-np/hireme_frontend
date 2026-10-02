@@ -1,75 +1,182 @@
-<section class="leads-page">
-  <div class="page-header-row">
+<section class="leads">
+  <header class="leads__head">
     <div>
-      <h1>All Requests</h1>
-      <p class="subtitle">Every form submission from the website appears here.</p>
+      <p class="kicker">Inbox</p>
+      <h1 class="leads__title">Requests</h1>
+      <p class="leads__subtitle">
+        @if (total()) {
+          {{ total() }} total {{ total() === 1 ? 'request' : 'requests' }} from the website.
+        } @else {
+          Every form submission from the website appears here.
+        }
+      </p>
     </div>
-    <button type="button" class="btn-refresh" (click)="loadLeads()" [disabled]="isLoading">
-      ↻ Refresh
+    <button type="button" class="btn btn-outline btn-sm" (click)="loadLeads()" [disabled]="isLoading()">
+      @if (isLoading()) {
+        <span class="spinner" aria-hidden="true"></span>
+      }
+      Refresh
     </button>
-  </div>
+  </header>
 
-  <div class="filter-tabs">
-    @for(filter of filters; track filter.key){
-    <button
-      type="button"
-      class="filter-tab"
-      [class.active]="activeFilter === filter.key"
-      (click)="setFilter(filter.key)"
-    >
-      {{ filter.label }}
-      <span class="count">{{ countFor(filter.key) }}</span>
-    </button>
+  <div class="leads__filters" role="tablist" aria-label="Filter requests by type">
+    @for (filter of filters; track filter.key) {
+      <button
+        type="button"
+        role="tab"
+        class="leads__filter"
+        [class.is-active]="activeFilter() === filter.key"
+        [attr.aria-selected]="activeFilter() === filter.key"
+        (click)="setFilter(filter.key)"
+      >
+        {{ filter.label }}
+        <span class="leads__filter-count">{{ countFor(filter.key) }}</span>
+      </button>
     }
   </div>
 
-  @if(isLoading){
-  <p class="loading">Loading requests...</p>
+  @if (totalPages() > 1) {
+    <p class="leads__filter-note">
+      Counts and filters apply to the {{ pageLeads().length }} requests on this page.
+    </p>
   }
 
-  @if(errorMessage){
-  <div class="alert">{{ errorMessage }}</div>
-  }
+  <app-alert
+    tone="error"
+    [message]="errorText()"
+    title="Couldn't load requests"
+    retryLabel="Try again"
+    (retry)="loadLeads()"
+  />
 
-  @if(!isLoading && filteredLeads.length === 0){
-  <div class="empty-state card">
-    <p>No requests yet for this filter.</p>
-    <small>Submissions from Contact, Freelance, and Student Project forms will appear here.</small>
-  </div>
-  }
-
-  @if(filteredLeads.length > 0){
-  <div class="table-wrapper">
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Phone</th>
-          <th>Email</th>
-          <th>Type</th>
-          <th>Status</th>
-          <th>Date</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for(lead of filteredLeads; track lead.id){
-        <tr>
-          <td><strong>{{ lead.name }}</strong></td>
-          <td>
-            <a [href]="'tel:' + lead.phone" class="phone-link">{{ lead.phone }}</a>
-          </td>
-          <td>{{ lead.email }}</td>
-          <td><span class="type-badge">{{ formatType(lead.lead_type) }}</span></td>
-          <td><span class="status" [class]="'status-' + lead.status.toLowerCase()">{{ lead.status }}</span></td>
-          <td>{{ lead.created_at | date:'medium' }}</td>
-          <td>
-            <a [routerLink]="['/admin/leads', lead.id]" class="view-btn">View Details</a>
-          </td>
-        </tr>
+  @if (isLoading()) {
+    <div class="leads__loading" aria-live="polite">
+      @for (row of [1, 2, 3, 4, 5]; track row) {
+        <span class="skeleton leads__loading-row" aria-hidden="true"></span>
+      }
+      <span class="visually-hidden">Loading requests</span>
+    </div>
+  } @else if (!filteredLeads().length && !errorText()) {
+    <div class="leads__empty">
+      <h2>Nothing here yet</h2>
+      <p>
+        @if (activeFilter() === 'all') {
+          Submissions from the contact, freelance and student project forms will appear here.
+        } @else {
+          No requests of this type on this page. Try "All", or move to another page.
         }
-      </tbody>
-    </table>
-  </div>
+      </p>
+    </div>
+  } @else if (filteredLeads().length) {
+    <!-- Desktop: table. Narrow screens: the same rows as cards (below). -->
+    <div class="leads__table-wrap">
+      <table class="leads__table">
+        <caption class="visually-hidden">Website requests, newest first</caption>
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Contact</th>
+            <th scope="col">Type</th>
+            <th scope="col">Status</th>
+            <th scope="col">Received</th>
+            <th scope="col"><span class="visually-hidden">Actions</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (lead of filteredLeads(); track lead.id) {
+            <tr>
+              <td class="leads__name">{{ lead.name }}</td>
+              <td>
+                <a [href]="'tel:' + lead.phone" class="leads__contact-link">{{ lead.phone }}</a>
+                <span class="leads__email">{{ lead.email }}</span>
+              </td>
+              <td><span class="chip">{{ typeLabel(lead.lead_type) }}</span></td>
+              <td>
+                <span class="badge" [class]="'badge ' + statusTone(lead.status)">
+                  {{ statusLabel(lead.status) }}
+                </span>
+              </td>
+              <td class="leads__date">{{ lead.created_at | date: 'd MMM y, HH:mm' }}</td>
+              <td class="leads__actions">
+                <a [routerLink]="['/admin/leads', lead.id]" class="btn btn-ghost btn-sm">Open</a>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <ul class="leads__cards">
+      @for (lead of filteredLeads(); track lead.id) {
+        <li class="lead-card">
+          <div class="lead-card__top">
+            <strong class="lead-card__name">{{ lead.name }}</strong>
+            <span class="badge" [class]="'badge ' + statusTone(lead.status)">
+              {{ statusLabel(lead.status) }}
+            </span>
+          </div>
+          <p class="lead-card__meta">
+            <span class="chip">{{ typeLabel(lead.lead_type) }}</span>
+            <span class="lead-card__date">{{ lead.created_at | date: 'd MMM y' }}</span>
+          </p>
+          <p class="lead-card__contact">
+            <a [href]="'tel:' + lead.phone">{{ lead.phone }}</a>
+            <span>{{ lead.email }}</span>
+          </p>
+          <a [routerLink]="['/admin/leads', lead.id]" class="btn btn-outline btn-sm btn-block">
+            Open request
+          </a>
+        </li>
+      }
+    </ul>
+  }
+
+  <!-- ---------------------------- pagination ---------------------------- -->
+  @if (total() > 0 && !errorText()) {
+    <nav class="pager" aria-label="Request pages">
+      <p class="pager__range" aria-live="polite">
+        Showing <strong>{{ rangeStart() }}&ndash;{{ rangeEnd() }}</strong> of
+        <strong>{{ total() }}</strong>
+      </p>
+
+      <div class="pager__controls">
+        <button
+          type="button"
+          class="btn btn-outline btn-sm"
+          (click)="goToPage(page() - 1)"
+          [disabled]="!hasPrev() || isLoading()"
+        >
+          &larr; Previous
+        </button>
+
+        <span class="pager__position">
+          Page {{ page() }} of {{ totalPages() }}
+        </span>
+
+        <button
+          type="button"
+          class="btn btn-outline btn-sm"
+          (click)="goToPage(page() + 1)"
+          [disabled]="!hasNext() || isLoading()"
+        >
+          Next &rarr;
+        </button>
+      </div>
+
+      <div class="pager__size">
+        <label for="leads-page-size">Per page</label>
+        <select
+          id="leads-page-size"
+          class="form-control pager__size-select"
+          [value]="pageSize()"
+          (change)="changePageSize($any($event.target).value)"
+          [disabled]="isLoading()"
+        >
+          @for (size of pageSizeOptions; track size) {
+            <option [value]="size">{{ size }}</option>
+          }
+        </select>
+      </div>
+    </nav>
   }
 </section>

@@ -1,186 +1,433 @@
-* {
-  box-sizing: border-box;
-}
+@use 'mixins' as *;
 
-.student-project-page {
-  padding: 60px 20px;
-  background: var(--bg-page);
-}
-
-.form-container {
-  max-width: 900px;
-  margin: auto;
-  background: var(--bg-surface);
-  padding: 40px;
-  border-radius: 20px;
-  box-shadow: 0 10px 35px var(--shadow);
-  border: 1px solid var(--border-light);
-}
-
-.form-header {
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-.form-header h1 {
-  font-size: 42px;
-  margin-bottom: 15px;
-  color: var(--text-primary);
-}
-
-.form-header p {
-  color: var(--text-muted);
-  font-size: 18px;
-  line-height: 1.6;
-}
-
-.form-grid {
+.sp__layout {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
+  gap: var(--space-8);
+  grid-template-columns: 1fr;
+  align-items: start;
+
+  @include up($bp-lg) {
+    grid-template-columns: minmax(0, 1.45fr) minmax(0, 0.7fr);
+    gap: var(--space-10);
+  }
 }
 
-.form-group {
+/* ------------------------------- form -------------------------------- */
+.sp__form {
+  @include card-feature;
+  padding: clamp(1.25rem, 0.9rem + 1.8vw, 2.5rem);
+}
+
+.sp__form-title {
+  font-size: var(--fs-h3);
+  margin-bottom: 0.3rem;
+}
+
+.sp__form-note {
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  margin-bottom: var(--space-6);
+
+  .req {
+    color: var(--danger-solid);
+    font-weight: 700;
+  }
+}
+
+/* The form is grouped into three numbered steps rather than one long wall
+   of inputs — it is the longest form on the site. */
+.sp__fieldset {
+  margin: 0 0 var(--space-8);
+  padding: 0;
+  border: 0;
+}
+
+.sp__legend {
   display: flex;
-  flex-direction: column;
-  margin-bottom: 22px;
-}
-
-.form-group label {
-  margin-bottom: 8px;
-  font-weight: 600;
-  color: var(--text-secondary);
-}
-
-input,
-select,
-textarea {
+  align-items: center;
+  gap: 0.55rem;
   width: 100%;
-  padding: 14px 16px;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  font-size: 16px;
-  transition: 0.3s;
-  background: var(--input-bg);
+  padding: 0 0 var(--space-4);
+  margin-bottom: var(--space-5);
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-display);
+  font-size: var(--fs-h4);
+  font-weight: 700;
   color: var(--text-primary);
 }
 
-input:focus,
-select:focus,
-textarea:focus {
-  outline: none;
-  border-color: var(--accent-light);
-  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+.sp__legend-num {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: var(--accent-600);
+  padding: 0.2rem 0.45rem;
+  border: 1px solid var(--accent-200);
+  border-radius: var(--radius-xs);
+  background: var(--bg-accent-soft);
 }
 
-input.invalid,
-select.invalid,
-textarea.invalid {
-  border-color: #dc2626;
-  background: var(--input-invalid-bg);
-}
-
-textarea {
-  resize: vertical;
-}
-
-.upload-section {
-  margin-top: 10px;
-  padding: 24px;
-  border: 1px solid var(--border-light);
-  border-radius: 14px;
-  background: var(--bg-muted);
-}
-
-.upload-section h3 {
-  margin: 0 0 10px;
-  color: var(--accent-text);
-}
-
-.upload-info,
-.help-text {
+.sp__legend-opt {
+  font-family: var(--font-body);
+  font-size: var(--fs-xs);
+  font-weight: 400;
   color: var(--text-muted);
 }
 
-.selected-files h4 {
-  color: var(--accent-text);
-}
-
-.file-item {
+.sp__meta {
   display: flex;
+  align-items: flex-start;
   justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+
+  .char-count {
+    margin-left: auto;
+  }
+}
+
+/* ------------------------------ uploads ------------------------------ */
+.sp__upload-info {
+  font-size: var(--fs-sm);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-4);
+}
+
+.sp__dropzone {
+  display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px 14px;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-light);
-  border-radius: 8px;
-  margin-bottom: 8px;
-  word-break: break-word;
-}
-
-.remove-file {
-  border: none;
-  background: #fee2e2;
-  color: #b91c1c;
-  padding: 6px 12px;
-  border-radius: 6px;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-md);
+  background: var(--bg-subtle);
   cursor: pointer;
-}
+  transition: border-color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
 
-.field-error,
-.error {
-  color: #dc2626;
-  font-size: 13px;
-  margin-top: 5px;
-}
-
-.alert {
-  padding: 14px 16px;
-  border-radius: 10px;
-  margin-top: 16px;
-  font-size: 14px;
-}
-
-.alert-error {
-  background: #fee2e2;
-  color: #b91c1c;
-}
-
-.alert-success {
-  background: #dcfce7;
-  color: #166534;
-}
-
-.submit-btn {
-  width: 100%;
-  margin-top: 25px;
-  padding: 16px;
-  border: none;
-  border-radius: 12px;
-  background: var(--accent);
-  color: white;
-  font-size: 18px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.submit-btn:hover {
-  background: var(--accent-light);
-}
-
-.submit-btn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-@media (max-width: 768px) {
-  .form-grid {
-    grid-template-columns: 1fr;
+  &:hover {
+    border-color: var(--accent-400);
+    background: var(--bg-accent-soft);
   }
 
-  .form-header h1 {
-    font-size: 32px;
+  /* The native input is visually hidden but still focusable, so the focus
+     ring is projected onto this label instead. */
+  &:focus-within {
+    @include focus-ring(var(--accent-400));
+    border-color: var(--accent-400);
+  }
+}
+
+.sp__dropzone-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  color: var(--accent-500);
+
+  svg {
+    width: 1.35rem;
+    height: 1.35rem;
+  }
+}
+
+.sp__dropzone-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+
+  strong {
+    font-size: var(--fs-body);
+    color: var(--text-primary);
+  }
+
+  small {
+    font-size: var(--fs-xs);
+    color: var(--text-muted);
+  }
+}
+
+.sp__file-input {
+  @include visually-hidden;
+}
+
+.sp__file-error {
+  margin-top: var(--space-3);
+}
+
+.sp__files {
+  list-style: none;
+  margin: var(--space-4) 0 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-2);
+}
+
+.sp__file {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  background: var(--bg-surface);
+  font-size: var(--fs-sm);
+}
+
+.sp__file-name {
+  @include truncate;
+  flex: 1;
+  min-width: 0;
+  color: var(--text-primary);
+}
+
+.sp__file-size {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+}
+
+.sp__file-remove {
+  flex: none;
+  padding: 0.2rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  background: none;
+  color: var(--danger-fg);
+  font: inherit;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--danger-bg);
+    border-color: var(--danger-border);
+  }
+
+  @include focus-visible;
+}
+
+/* ----------------------------- feedback ------------------------------ */
+.sp__feedback {
+  display: grid;
+  gap: var(--space-3);
+
+  &:empty {
+    display: none;
+  }
+}
+
+.sp__submit {
+  margin-top: var(--space-6);
+  width: 100%;
+
+  @include up($bp-sm) {
+    width: auto;
+    min-width: 16rem;
+  }
+}
+
+/* ------------------------------- aside -------------------------------- */
+.sp__aside {
+  display: grid;
+  gap: var(--space-4);
+
+  @include up($bp-lg) {
+    position: sticky;
+    top: calc(var(--nav-height) + var(--space-6));
+  }
+}
+
+.sp__card {
+  padding: var(--space-6);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.sp__card--muted {
+  background: var(--bg-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: none;
+
+  p {
+    margin: 0;
+    font-size: var(--fs-sm);
+  }
+}
+
+.sp__aside-title {
+  font-size: var(--fs-h4);
+  margin-block: var(--space-3) var(--space-4);
+}
+
+.sp__aside-sub {
+  font-size: var(--fs-h4);
+  margin-bottom: var(--space-2);
+}
+
+.sp__deliverables {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.7rem;
+
+  li {
+    position: relative;
+    margin: 0;
+    padding-left: 1.6rem;
+    font-size: var(--fs-sm);
+    color: var(--text-secondary);
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.42rem;
+      width: 0.9rem;
+      height: 0.42rem;
+      border-left: 2px solid var(--accent-400);
+      border-bottom: 2px solid var(--accent-400);
+      transform: rotate(-45deg);
+    }
+  }
+}
+
+/* =============================================================================
+   Body copy below the form.
+   -----------------------------------------------------------------------------
+   The page used to be a header plus a form, which is thin for a page meant to
+   rank for "final year project help". These sections carry the explanatory
+   copy and the FAQ. Alternating section backgrounds keep the long scroll
+   readable without introducing a new card style.
+   ========================================================================== */
+.sp-info {
+  background: var(--bg-surface);
+  border-block: 1px solid var(--border);
+}
+
+.sp-info__grid {
+  display: grid;
+  gap: var(--space-6);
+  grid-template-columns: 1fr;
+
+  @include up($bp-md) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-8);
+  }
+}
+
+.sp-info__item {
+  padding-top: var(--space-4);
+  border-top: 2px solid var(--accent-400);
+
+  h3 {
+    margin-bottom: var(--space-2);
+  }
+
+  p {
+    margin: 0;
+    font-size: var(--fs-sm);
+    line-height: var(--lh-relaxed);
+  }
+}
+
+.sp-info__item:nth-child(even) {
+  border-top-color: var(--brand-500);
+}
+
+/* Shared prose measure. 68ch is the readable maximum for this body size. */
+.sp-prose {
+  max-width: 68ch;
+
+  p {
+    line-height: var(--lh-relaxed);
+  }
+
+  p:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.sp-branches__chips {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: var(--space-6) 0 0;
+  padding: 0;
+
+  li {
+    margin: 0;
+  }
+}
+
+/* ------------------------------ process ------------------------------- */
+.sp-process {
+  background: var(--bg-surface);
+  border-block: 1px solid var(--border);
+}
+
+.sp-process__steps {
+  list-style: none;
+  counter-reset: sp-step;
+  margin: 0 0 var(--space-12);
+  padding: 0;
+  max-width: 72ch;
+}
+
+.sp-process__step {
+  counter-increment: sp-step;
+  position: relative;
+  margin: 0;
+  padding: var(--space-5) 0 var(--space-5) 3.25rem;
+  border-top: 1px solid var(--border);
+
+  &:last-child {
+    border-bottom: 1px solid var(--border);
+  }
+
+  &::before {
+    content: counter(sp-step, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: var(--space-5);
+    font-family: var(--font-mono);
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    color: var(--accent-500);
+  }
+
+  h3 {
+    font-size: var(--fs-h4);
+    margin-bottom: 0.3rem;
+  }
+
+  p {
+    margin: 0;
+    font-size: var(--fs-sm);
+    line-height: var(--lh-relaxed);
+  }
+}
+
+.sp-process__note {
+  padding: var(--space-6);
+  background: var(--bg-subtle);
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--accent-400);
+
+  h3 {
+    font-size: var(--fs-h4);
+    margin-bottom: var(--space-3);
   }
 }

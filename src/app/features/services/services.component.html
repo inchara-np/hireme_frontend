@@ -1,59 +1,136 @@
 <app-page-header
-  title="Our Services"
-  subtitle="Professional software development for businesses, startups, and engineering students."
-></app-page-header>
+  kicker="Services"
+  title="Custom web development and academic project services"
+  subtitle="Two tracks — academic project development for students and custom software for businesses — plus the individual pieces that make up either one. Remote, anywhere in India."
+/>
 
-<section class="services-page">
+<section class="section services">
   <div class="container">
 
-    <div class="cards">
-      <div class="card service-card">
-        <span class="icon">⚙️</span>
-        <h3>Backend Development</h3>
-        <p>Scalable APIs with Golang, Gin, PostgreSQL, JWT auth, file uploads, and cloud-ready architecture.</p>
-        <a routerLink="/contact" [queryParams]="{ type: 'business' }" class="link">Get a quote →</a>
-      </div>
-
-      <div class="card service-card">
-        <span class="icon">🖥️</span>
-        <h3>Frontend Development</h3>
-        <p>Modern Angular applications with SSR, responsive design, admin panels, and production builds.</p>
-        <a routerLink="/contact" [queryParams]="{ type: 'business' }" class="link">Get a quote →</a>
-      </div>
-
-      <div class="card service-card">
-        <span class="icon">🎓</span>
-        <h3>Student Projects</h3>
-        <p>Mini, major, IEEE, and research projects with code, documentation, report, and viva support.</p>
-        <a routerLink="/student-projects" class="link">Get project help →</a>
-      </div>
-
-      <div class="card service-card">
-        <span class="icon">☁️</span>
-        <h3>DevOps & Deployment</h3>
-        <p>Docker, CI/CD, environment setup, SSL, and secure production deployment.</p>
-        <a routerLink="/contact" class="link">Discuss deployment →</a>
-      </div>
-
-      <div class="card service-card">
-        <span class="icon">💼</span>
-        <h3>Freelance Development</h3>
-        <p>Hire on hourly, project, or retainer basis for flexible development support.</p>
-        <a routerLink="/freelance-services" class="link">Hire as freelancer →</a>
-      </div>
-
-      <div class="card service-card">
-        <span class="icon">🔍</span>
-        <h3>Code Review & Consulting</h3>
-        <p>Architecture review, performance audit, and technical guidance for your existing codebase.</p>
-        <a routerLink="/contact" class="link">Book consultation →</a>
-      </div>
+    <div class="section-head">
+      <p class="kicker">Overview</p>
+      <h2>What we build</h2>
+      <p>
+        Six services, two audiences. Students come to us for a final year, mini or IEEE
+        project that has to be built, documented and then defended. Businesses and founders
+        come to us for a web application, an API or an MVP that has to work in production
+        and then be handed over. The engineering is the same in both cases; only the
+        paperwork at the end is different.
+      </p>
     </div>
 
-    <div class="bottom-cta card">
-      <h3>Not sure which service you need?</h3>
-      <p>Send your requirements and we'll recommend the best approach — free consultation.</p>
-      <a routerLink="/contact" class="btn btn-primary">Contact Us</a>
+    <ul class="services__grid">
+      @for (service of services; track service.title; let i = $index) {
+        <li
+          class="service"
+          [class.service--emphasis]="service.emphasis"
+          [appReveal]="i * 60"
+        >
+          <h3 class="service__title">{{ service.title }}</h3>
+          <p class="service__summary">{{ service.summary }}</p>
+
+          @if (service.detail.length) {
+            <ul class="service__detail">
+              @for (point of service.detail; track point) {
+                <li>{{ point }}</li>
+              }
+            </ul>
+          }
+
+          <a
+            [routerLink]="service.linkPath"
+            [queryParams]="service.linkParams ?? null"
+            class="link-arrow service__link"
+          >
+            {{ service.linkLabel }}
+            <span class="arrow" aria-hidden="true">&rarr;</span>
+          </a>
+        </li>
+      }
+    </ul>
+
+    <div class="services__detail">
+      <article class="services__block">
+        <h2>Custom web application development</h2>
+        <p>
+          A custom web application is the right answer when an off-the-shelf tool almost
+          fits but not quite — the pricing rules are yours, the workflow is yours, or the
+          data cannot leave your control. We build these end to end: an Angular front end
+          that works on a phone and passes accessibility checks, a Go API with PostgreSQL
+          behind it, authentication, file handling, an admin panel your own staff can
+          operate, and a schema designed so next year's features do not mean starting
+          again.
+        </p>
+        <p>
+          Typical work here is a customer portal, an internal tool replacing a spreadsheet,
+          a booking or enquiry flow, a catalogue with a real back office, or an MVP that
+          needs to be in front of users quickly without becoming unmaintainable three
+          months later. Deployment, SSL and a documented handover are included rather than
+          quoted separately, because a build nobody but us can redeploy is not actually
+          finished.
+        </p>
+        <a routerLink="/freelance-services" class="link-arrow">
+          Hire a freelance full stack developer
+          <span class="arrow" aria-hidden="true">&rarr;</span>
+        </a>
+      </article>
+
+      <article class="services__block">
+        <h2>Academic project development for students</h2>
+        <p>
+          On the student side we build mini, major, final year and IEEE-based projects, and
+          we treat the report and the viva as part of the delivery rather than your problem
+          afterwards. You get the full source code with setup instructions, a project report
+          and PPT written in your department's structure, and a walkthrough of the
+          architecture and each module so that you can answer questions about any part of
+          it.
+        </p>
+        <p>
+          Branches covered include CSE, IT, ISE, AI/ML, data science, MCA, BCA and MSc, plus
+          the software side of ECE and EEE projects where a device reports into a dashboard.
+          If your guide has handed you an IEEE paper, send it with your enquiry and we will
+          tell you which parts of it are realistically reproducible before you commit to
+          anything.
+        </p>
+        <a routerLink="/student-projects" class="link-arrow">
+          Get final year project help
+          <span class="arrow" aria-hidden="true">&rarr;</span>
+        </a>
+      </article>
+
+      <article class="services__block">
+        <h2>The stack, and why it is this short</h2>
+        <p>
+          Angular, Go, PostgreSQL, Docker. That is deliberately fewer technologies than most
+          studios list. A narrow stack means the person writing your code has done this
+          exact combination many times over, the handover documentation is already proven
+          in practice, and nobody is billing you for a first attempt at something unfamiliar.
+        </p>
+        <p>
+          It also makes us straightforward to rule out, which is a feature. If your project
+          needs a native mobile app, a data warehouse, or deep work inside a platform we
+          have never touched, you will hear that in the first reply rather than three weeks
+          in. When the honest answer is "not us", saying it early is worth more to you than
+          the work would have been.
+        </p>
+        <a routerLink="/contact" class="link-arrow">
+          Ask whether your project is a fit
+          <span class="arrow" aria-hidden="true">&rarr;</span>
+        </a>
+      </article>
+    </div>
+
+    <div class="services__footer panel-inverse">
+      <div class="services__footer-copy">
+        <p class="kicker">Not sure which you need?</p>
+        <h2>Describe the problem, not the solution</h2>
+        <p>
+          Send what you are trying to achieve and the constraints you are working with.
+          We'll tell you what we'd build, what it would cost, and whether we're the right
+          people for it at all.
+        </p>
+      </div>
+      <a routerLink="/contact" class="btn btn-accent btn-lg">Start a conversation</a>
     </div>
 
   </div>

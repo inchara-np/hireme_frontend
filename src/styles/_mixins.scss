@@ -1,0 +1,138 @@
+/* =============================================================================
+   Shared SCSS mixins. Colour always comes from tokens — these only encode
+   layout, breakpoints and repeated structural patterns.
+   ========================================================================== */
+
+/* Breakpoints. The site is designed mobile-first and must hold at 360px. */
+$bp-xs: 400px;
+$bp-sm: 560px;
+$bp-md: 768px;
+$bp-lg: 1024px;
+$bp-xl: 1200px;
+
+@mixin up($bp) {
+  @media (min-width: $bp) {
+    @content;
+  }
+}
+
+@mixin down($bp) {
+  @media (max-width: ($bp - 1px)) {
+    @content;
+  }
+}
+
+/* Honour the user's motion preference everywhere animation is used. */
+@mixin motion-safe {
+  @media (prefers-reduced-motion: no-preference) {
+    @content;
+  }
+}
+
+@mixin motion-reduce {
+  @media (prefers-reduced-motion: reduce) {
+    @content;
+  }
+}
+
+/* A single, consistent, clearly visible focus treatment. */
+@mixin focus-ring($color: var(--brand-500)) {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--bg-surface), 0 0 0 4px #{$color};
+}
+
+@mixin focus-visible($color: var(--brand-500)) {
+  &:focus-visible {
+    @include focus-ring($color);
+  }
+}
+
+@mixin container($max: var(--container)) {
+  width: 100%;
+  max-width: $max;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* Card hierarchy. Levels differ in radius, border, elevation and padding on
+   purpose — a supporting tile should not look like a primary offer. */
+@mixin card-flat {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+}
+
+@mixin card-raised {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-sm);
+}
+
+@mixin card-feature {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-8);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Small uppercase mono label used above section headings. */
+@mixin kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-kicker);
+  font-weight: 500;
+  letter-spacing: var(--tracking-kicker);
+  text-transform: uppercase;
+  color: var(--brand-600);
+}
+
+@mixin heading($size: var(--fs-h2)) {
+  font-family: var(--font-display);
+  font-size: $size;
+  font-weight: 700;
+  line-height: var(--lh-snug);
+  letter-spacing: var(--tracking-tight);
+  text-wrap: balance;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* Faint blueprint grid used behind hero and inverse panels. */
+@mixin blueprint-grid($size: 56px) {
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: #{$size} #{$size};
+}
+
+@mixin truncate($lines: 1) {
+  @if $lines == 1 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  } @else {
+    display: -webkit-box;
+    -webkit-line-clamp: $lines;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+@mixin visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

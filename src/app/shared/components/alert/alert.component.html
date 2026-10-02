@@ -1,0 +1,45 @@
+@if (message) {
+<div class="alert" [class]="'alert--' + tone" [attr.role]="liveRole" [attr.aria-live]="ariaLive">
+  <span class="alert__icon" aria-hidden="true">
+    @switch (tone) {
+      @case ('error') {
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <circle cx="10" cy="10" r="8" />
+          <path d="M10 6v5" />
+          <path d="M10 14h.01" />
+        </svg>
+      }
+      @case ('success') {
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="10" cy="10" r="8" />
+          <path d="m6.5 10.2 2.3 2.3 4.7-4.9" />
+        </svg>
+      }
+      @case ('warning') {
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10 2.8 18.4 17H1.6z" />
+          <path d="M10 8v3.4" />
+          <path d="M10 14.2h.01" />
+        </svg>
+      }
+      @default {
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <circle cx="10" cy="10" r="8" />
+          <path d="M10 9.2v4.6" />
+          <path d="M10 6.4h.01" />
+        </svg>
+      }
+    }
+  </span>
+
+  <div class="alert__body">
+    @if (title) {
+      <strong class="alert__title">{{ title }}</strong>
+    }
+    <p class="alert__message">{{ message }}</p>
+    @if (retryLabel) {
+      <button type="button" class="alert__retry" (click)="retry.emit()">{{ retryLabel }}</button>
+    }
+  </div>
+</div>
+}

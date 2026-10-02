@@ -1,92 +1,117 @@
-import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
-  Validators,
-  AbstractControl
+  Validators
 } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs/operators';
-import { HttpErrorResponse } from '@angular/common/http';
 
 import { AuthService } from '../../../core/services/auth.service';
+import { SeoService } from '../../../core/services/seo.service';
+import { errorMessage } from '../../../core/models/app-error.model';
 import { ThemeToggleComponent } from '../../../shared/components/theme-toggle/theme-toggle.component';
+import { AlertComponent } from '../../../shared/components/alert/alert.component';
+import { errorFor, showError } from '../../../shared/utils/form-errors';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ThemeToggleComponent],
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    ThemeToggleComponent,
+    AlertComponent
+  ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly seo = inject(SeoService);
 
-  loginForm: FormGroup;
-  isSubmitting = false;
-  errorMessage = '';
+  readonly loginForm: FormGroup;
+  readonly isSubmitting = signal(false);
+  readonly errorMessageText = signal('');
 
   constructor() {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(128)]]
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(6),
+          Validators.maxLength(128)
+        ]
+      ]
     });
   }
 
+  ngOnInit(): void {
+    this.seo.setNoIndex('Sign in', '/admin/login');
+  }
+
+  isInvalid(controlName: string): boolean {
+    return showError(this.loginForm, controlName);
+  }
+
+  getError(controlName: string): string {
+    return errorFor(this.loginForm, controlName);
+  }
+
+  /**
+   * Trims a text field when the user leaves it.
+   *
+   * Angular's `Validators.email` rejects leading/trailing whitespace, so a
+   * pasted address like "  you@example.com " would otherwise show a confusing
+   * "enter a valid email" error. Normalising on blur fixes the value instead
+   * of blaming the user for it.
+   */
+  trimField(controlName: string): void {
+    const control = this.loginForm.get(controlName);
+    const value = control?.value;
+    if (typeof value !== 'string') {
+      return;
+    }
+    const trimmed = value.trim();
+    if (trimmed !== value) {
+      control?.setValue(trimmed);
+    }
+  }
+
   submit(): void {
+    this.errorMessageText.set('');
+
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
       return;
     }
 
-    this.isSubmitting = true;
-    this.errorMessage = '';
+    this.isSubmitting.set(true);
 
     this.authService
-      .login(this.loginForm.value)
-      .pipe(finalize(() => (this.isSubmitting = false)))
+      .login(this.loginForm.getRawValue())
+      .pipe(finalize(() => this.isSubmitting.set(false)))
       .subscribe({
-        next: () => this.router.navigate(['/admin/dashboard']),
-        error: (err: HttpErrorResponse) => {
-          if (err.status === 0) {
-            this.errorMessage = 'Unable to reach the server. Please ensure the backend is running.';
-            return;
-          }
-          if (err.status === 429) {
-            this.errorMessage = 'Too many attempts. Please wait a minute and try again.';
-            return;
-          }
-          this.errorMessage = 'Invalid email or password.';
+        next: () => void this.router.navigate(['/admin/dashboard']),
+        error: (error: unknown) => {
+          this.errorMessageText.set(
+            errorMessage(error, {
+              // Never distinguish "unknown email" from "wrong password".
+              unauthorized: 'Incorrect email or password.',
+              validation: 'Incorrect email or password.',
+              notFound: 'Incorrect email or password.',
+              rateLimit:
+                'Too many sign-in attempts. Wait a minute before trying again.',
+              network:
+                'Cannot reach the API. Check that the backend is running and reachable.'
+            })
+          );
         }
       });
   }
-
-  isInvalid(controlName: string): boolean {
-    const control = this.loginForm.get(controlName);
-    return !!(control && control.invalid && control.touched);
-  }
-
-  getError(controlName: string): string {
-    const control = this.loginForm.get(controlName);
-    if (!control || !control.errors || !control.touched) {
-      return '';
-    }
-    if (control.errors['required']) {
-      return 'This field is required.';
-    }
-    if (control.errors['email']) {
-      return 'Enter a valid email address.';
-    }
-    if (control.errors['minlength']) {
-      return 'Password must be at least 6 characters.';
-    }
-    return 'Invalid value.';
-  }
-
-  get email(): AbstractControl | null { return this.loginForm.get('email'); }
-  get password(): AbstractControl | null { return this.loginForm.get('password'); }
 }

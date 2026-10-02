@@ -1,44 +1,66 @@
-.whatsapp-fab {
+@use 'mixins' as *;
+
+:host {
   position: fixed;
-  right: 24px;
-  bottom: 24px;
-  z-index: 1100;
-  display: flex;
+  right: clamp(0.85rem, 2vw, 1.5rem);
+  bottom: clamp(0.85rem, 2vw, 1.5rem);
+  z-index: var(--z-overlay);
+}
+
+.wa {
+  display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 14px 20px;
-  border: none;
-  border-radius: 999px;
-  background: #25d366;
-  color: white;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  box-shadow: 0 8px 24px rgba(37, 211, 102, 0.45);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
+  gap: 0.55rem;
+  height: 3.1rem;
+  padding: 0 1.05rem;
+  border-radius: var(--radius-pill);
+  /* WhatsApp brand green is fixed by the third party, so it is declared once
+     here as a local token rather than pretending it belongs to the palette. */
+  --wa-green: #1faf54;
+  --wa-green-dark: #178c43;
+  background: var(--wa-green);
+  color: #fff;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 10px 24px -8px rgba(31, 175, 84, 0.65);
+  transition: background-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-base) var(--ease-spring),
+    box-shadow var(--dur-base) var(--ease-out);
 
-.whatsapp-fab:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(37, 211, 102, 0.5);
-}
-
-.whatsapp-fab svg {
-  width: 24px;
-  height: 24px;
-  fill: currentColor;
-}
-
-@media (max-width: 480px) {
-  .whatsapp-fab span {
-    display: none;
+  &:hover {
+    background: var(--wa-green-dark);
+    color: #fff;
+    box-shadow: 0 14px 30px -8px rgba(31, 175, 84, 0.72);
   }
 
-  .whatsapp-fab {
-    width: 56px;
-    height: 56px;
+  &:focus-visible {
+    box-shadow: 0 0 0 2px var(--bg-page), 0 0 0 4px var(--wa-green);
+    outline: none;
+  }
+}
+
+@include motion-safe {
+  .wa:hover {
+    transform: translateY(-2px);
+  }
+}
+
+.wa__icon {
+  width: 1.3rem;
+  height: 1.3rem;
+  flex: none;
+}
+
+/* On phones the label is dropped so the control never covers content. */
+@include down($bp-sm) {
+  .wa {
+    width: 3.1rem;
     padding: 0;
     justify-content: center;
-    border-radius: 50%;
+  }
+
+  .wa__label {
+    @include visually-hidden;
   }
 }

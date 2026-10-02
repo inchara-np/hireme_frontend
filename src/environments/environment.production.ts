@@ -3,6 +3,6 @@ export const environment = {
   apiUrl: 'https://api.valahatti-tech.com/api/v1',
   apiOrigin: 'https://api.valahatti-tech.com',
   siteUrl: 'https://valahatti-tech.com',
-  whatsappNumber: '919876543210',
+  whatsappNumber: '916364429949',
   whatsappDefaultMessage: 'Hi Valahatti Technologies, I want to discuss a project with you.'
 };

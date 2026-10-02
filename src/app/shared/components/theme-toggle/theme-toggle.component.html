@@ -1,3 +1,19 @@
-<button type="button" class="theme-btn" (click)="toggleTheme()" aria-label="Toggle theme">
-  {{ themeService.isDarkMode() ? '☀️' : '🌙' }}
+<button
+  type="button"
+  class="theme-toggle"
+  (click)="toggle()"
+  [attr.aria-label]="themeService.isDark() ? 'Switch to light theme' : 'Switch to dark theme'"
+  [attr.aria-pressed]="themeService.isDark()"
+  title="Toggle light / dark theme"
+>
+  <span class="theme-toggle__track" aria-hidden="true">
+    <span class="theme-toggle__thumb"></span>
+    <svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
+      <circle cx="10" cy="10" r="3.4" />
+      <path d="M10 2.2v1.6M10 16.2v1.6M17.8 10h-1.6M3.8 10H2.2M15.5 4.5l-1.1 1.1M5.6 14.4l-1.1 1.1M15.5 15.5l-1.1-1.1M5.6 5.6 4.5 4.5" />
+    </svg>
+    <svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round">
+      <path d="M16.2 12.4A6.8 6.8 0 0 1 7.6 3.8a6.8 6.8 0 1 0 8.6 8.6z" />
+    </svg>
+  </span>
 </button>

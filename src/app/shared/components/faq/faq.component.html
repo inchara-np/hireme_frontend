@@ -1,0 +1,20 @@
+<div class="faq">
+  @for (item of items; track item.question) {
+    <details class="faq__item">
+      <summary class="faq__question">
+        <h3>{{ item.question }}</h3>
+      </summary>
+
+      <div class="faq__answer">
+        <p>{{ item.answer }}</p>
+
+        @if (item.linkPath && item.linkLabel) {
+          <a [routerLink]="item.linkPath" class="link-arrow">
+            {{ item.linkLabel }}
+            <span class="arrow" aria-hidden="true">&rarr;</span>
+          </a>
+        }
+      </div>
+    </details>
+  }
+</div>

@@ -1,71 +1,72 @@
 import { Routes } from '@angular/router';
 
-import { HomeComponent } from './features/home/home.component';
-import { ServicesComponent } from './features/services/services.component';
-import { StudentProjectsComponent } from './features/student-projects/student-projects.component';
-import { FreelanceServicesComponent } from './features/freelance-services/freelance-services.component';
-import { ContactComponent } from './features/contact/contact.component';
-
-import { LoginComponent } from './features/admin/login/login.component';
-import { DashboardComponent } from './features/admin/dashboard/dashboard.component';
-import { LeadsComponent } from './features/admin/leads/leads.component';
-import { LeadDetailsComponent } from './features/admin/lead-details/lead-details.component';
-import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
-
 import { authGuard, guestGuard } from './core/guards/auth.guard';
 
+/**
+ * Every route is lazy (`loadComponent` / `loadChildren`).
+ *
+ * The important split is `admin`: the layout, dashboard, leads list and lead
+ * details now live in their own chunk behind `loadChildren`, so a visitor
+ * reading the marketing site never downloads admin code. The public pages are
+ * individually lazy too, which keeps the initial bundle to the shell plus the
+ * one route being viewed — and because all five public routes are prerendered,
+ * the first paint is still static HTML.
+ */
 export const routes: Routes = [
   {
     path: '',
-    component: HomeComponent
+    loadComponent: () =>
+      import('./features/home/home.component').then((m) => m.HomeComponent)
   },
   {
     path: 'services',
-    component: ServicesComponent
+    loadComponent: () =>
+      import('./features/services/services.component').then(
+        (m) => m.ServicesComponent
+      )
   },
   {
     path: 'student-projects',
-    component: StudentProjectsComponent
+    loadComponent: () =>
+      import('./features/student-projects/student-projects.component').then(
+        (m) => m.StudentProjectsComponent
+      )
   },
   {
     path: 'freelance-services',
-    component: FreelanceServicesComponent
+    loadComponent: () =>
+      import('./features/freelance-services/freelance-services.component').then(
+        (m) => m.FreelanceServicesComponent
+      )
   },
   {
     path: 'contact',
-    component: ContactComponent
+    loadComponent: () =>
+      import('./features/contact/contact.component').then(
+        (m) => m.ContactComponent
+      )
   },
+
+  // --- admin: separate lazy chunk, never shipped to public visitors -------
   {
     path: 'admin/login',
-    component: LoginComponent,
-    canActivate: [guestGuard]
+    canActivate: [guestGuard],
+    loadComponent: () =>
+      import('./features/admin/login/login.component').then(
+        (m) => m.LoginComponent
+      )
   },
   {
     path: 'admin',
-    component: AdminLayoutComponent,
     canActivate: [authGuard],
-    children: [
-      {
-        path: 'dashboard',
-        component: DashboardComponent
-      },
-      {
-        path: 'leads',
-        component: LeadsComponent
-      },
-      {
-        path: 'leads/:id',
-        component: LeadDetailsComponent
-      },
-      {
-        path: '',
-        redirectTo: 'dashboard',
-        pathMatch: 'full'
-      }
-    ]
+    loadChildren: () => import('./features/admin/admin.routes').then((m) => m.adminRoutes)
   },
+
   {
     path: '**',
-    redirectTo: ''
+    loadComponent: () =>
+      import('./features/not-found/not-found.component').then(
+        (m) => m.NotFoundComponent
+      )
   }
 ];

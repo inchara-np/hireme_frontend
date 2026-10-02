@@ -1,66 +1,146 @@
-<section class="lead-details-page">
-  <a routerLink="/admin/leads" class="back-link">← Back to leads</a>
+<section class="detail">
+  <a routerLink="/admin/leads" class="detail__back">&larr; All requests</a>
 
-  @if(isLoading){
-  <p>Loading lead...</p>
+  @if (isLoading()) {
+    <div class="detail__loading" aria-live="polite">
+      <span class="skeleton detail__loading-title" aria-hidden="true"></span>
+      <span class="skeleton detail__loading-block" aria-hidden="true"></span>
+      <span class="visually-hidden">Loading request</span>
+    </div>
   }
 
-  @if(errorMessage){
-  <div class="alert">{{ errorMessage }}</div>
-  }
+  <app-alert
+    tone="error"
+    [message]="errorText()"
+    title="Couldn't load this request"
+    retryLabel="Try again"
+    (retry)="loadLead()"
+  />
 
-  @if(lead){
-  <div class="card details-card">
-    <div class="header">
-      <h1>{{ lead.name }}</h1>
-      <span class="status">{{ lead.status }}</span>
-    </div>
-
-    <div class="grid">
-      <div><strong>Email:</strong> {{ lead.email }}</div>
-      <div><strong>Phone:</strong> {{ lead.phone }}</div>
-      <div><strong>Type:</strong> {{ lead.lead_type }}</div>
-      <div><strong>Company:</strong> {{ lead.company || '—' }}</div>
-      <div><strong>College:</strong> {{ lead.college_name || '—' }}</div>
-      <div><strong>Branch:</strong> {{ lead.branch || '—' }}</div>
-      <div><strong>Project:</strong> {{ lead.project_title || '—' }}</div>
-      <div><strong>Submission:</strong> {{ lead.submission_date || '—' }}</div>
-      <div><strong>Urgency:</strong> {{ lead.urgency || '—' }}</div>
-      <div><strong>Created:</strong> {{ lead.created_at | date:'medium' }}</div>
-    </div>
-
-    <div class="description">
-      <strong>Description</strong>
-      <p>{{ lead.description }}</p>
-    </div>
-
-    @if(lead.attachments.length){
-    <div class="attachments">
-      <strong>Attachments</strong>
-      <ul>
-        @for(file of lead.attachments; track file){
-        <li><a [href]="attachmentUrl(file)" target="_blank" rel="noopener">{{ file }}</a></li>
-        }
-      </ul>
-    </div>
-    }
-
-    <div class="status-update">
-      <label>Update Status</label>
-      <div class="status-row">
-        <select [(ngModel)]="selectedStatus">
-          @for(status of statusOptions; track status){
-          <option [value]="status">{{ status }}</option>
-          }
-        </select>
-        <button class="btn btn-primary" (click)="updateStatus()" [disabled]="isUpdating">
-          {{ isUpdating ? 'Updating...' : 'Save Status' }}
-        </button>
+  @if (lead(); as item) {
+    <header class="detail__head">
+      <div>
+        <p class="kicker">{{ typeLabel(item.lead_type) }}</p>
+        <h1 class="detail__name">{{ item.name }}</h1>
+        <p class="detail__received">
+          Received {{ item.created_at | date: 'd MMMM y, HH:mm' }}
+        </p>
       </div>
-      @if(successMessage){
-      <div class="success">{{ successMessage }}</div>
-      }
+      <span class="badge" [class]="'badge ' + statusTone(item.status)">
+        {{ statusLabel(item.status) }}
+      </span>
+    </header>
+
+    <div class="detail__layout">
+
+      <div class="detail__main">
+        <section class="detail__card">
+          <h2 class="detail__card-title">Contact</h2>
+          <dl class="detail__facts">
+            <div>
+              <dt>Email</dt>
+              <dd><a [href]="'mailto:' + item.email">{{ item.email }}</a></dd>
+            </div>
+            <div>
+              <dt>Phone</dt>
+              <dd><a [href]="'tel:' + item.phone">{{ item.phone }}</a></dd>
+            </div>
+            @if (item.company) {
+              <div>
+                <dt>Company</dt>
+                <dd>{{ item.company }}</dd>
+              </div>
+            }
+            @if (item.college_name) {
+              <div>
+                <dt>College</dt>
+                <dd>{{ item.college_name }}</dd>
+              </div>
+            }
+            @if (item.branch) {
+              <div>
+                <dt>Branch</dt>
+                <dd>{{ item.branch }}</dd>
+              </div>
+            }
+          </dl>
+        </section>
+
+        @if (item.project_title || item.submission_date || item.urgency) {
+          <section class="detail__card">
+            <h2 class="detail__card-title">Project</h2>
+            <dl class="detail__facts">
+              @if (item.project_title) {
+                <div>
+                  <dt>Type</dt>
+                  <dd>{{ item.project_title }}</dd>
+                </div>
+              }
+              @if (item.submission_date) {
+                <div>
+                  <dt>Submission date</dt>
+                  <dd>{{ item.submission_date }}</dd>
+                </div>
+              }
+              @if (item.urgency) {
+                <div>
+                  <dt>Timeline</dt>
+                  <dd>{{ item.urgency }}</dd>
+                </div>
+              }
+            </dl>
+          </section>
+        }
+
+        <section class="detail__card">
+          <h2 class="detail__card-title">What they wrote</h2>
+          <p class="detail__description">{{ item.description }}</p>
+        </section>
+
+        @if (item.attachments.length) {
+          <section class="detail__card">
+            <h2 class="detail__card-title">Attachments</h2>
+            <ul class="detail__attachments">
+              @for (file of item.attachments; track file) {
+                <li>
+                  <a [href]="attachmentUrl(file)" target="_blank" rel="noopener noreferrer">
+                    {{ attachmentName(file) }}
+                  </a>
+                </li>
+              }
+            </ul>
+          </section>
+        }
+      </div>
+
+      <aside class="detail__side" aria-label="Update status">
+        <div class="detail__card detail__status">
+          <h2 class="detail__card-title">Status</h2>
+          <p class="detail__status-hint">Update as you work through this request.</p>
+
+          <label class="form-label" for="lead-status">Set status</label>
+          <select id="lead-status" class="form-control" [(ngModel)]="selectedStatus"
+            [disabled]="isUpdating()">
+            @for (status of statusOptions; track status) {
+              <option [value]="status">{{ statusLabel(status) }}</option>
+            }
+          </select>
+
+          <button type="button" class="btn btn-primary btn-block detail__save"
+            (click)="updateStatus()" [disabled]="isUpdating() || !statusChanged">
+            @if (isUpdating()) {
+              <span class="spinner" aria-hidden="true"></span>
+              Saving…
+            } @else {
+              Save status
+            }
+          </button>
+
+          <app-alert tone="error" [message]="updateError()" />
+          <app-alert tone="success" [message]="successText()" />
+        </div>
+      </aside>
+
     </div>
-  </div>
   }
 </section>

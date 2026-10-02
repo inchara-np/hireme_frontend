@@ -1,121 +1,265 @@
 <app-page-header
+  [kicker]="kicker"
   [title]="pageTitle"
   [subtitle]="pageSubtitle"
-></app-page-header>
+/>
 
-<section class="contact-page">
-  <div class="container">
-    <div class="contact-layout">
-      <aside class="contact-info card">
-        <h3>Let's build something great</h3>
-        <p>Whether you need a freelancer, a full project build, or student project support — we're here to help.</p>
-        <ul>
-          <li>✅ Response within 24 hours</li>
-          <li>✅ Free initial consultation</li>
-          <li>✅ Transparent pricing & timeline</li>
-          <li>✅ Email confirmation on submission</li>
-        </ul>
-      </aside>
+<section class="section contact">
+  <div class="container contact__layout">
 
-      <form [formGroup]="contactForm" (ngSubmit)="submit()" class="contact-form card" novalidate>
+    <!-- ---------------------------- form ---------------------------- -->
+    <form
+      [formGroup]="contactForm"
+      (ngSubmit)="submit()"
+      class="contact__form"
+      novalidate
+      aria-labelledby="contact-form-heading"
+    >
+      <h2 id="contact-form-heading" class="contact__form-title">Send your requirement</h2>
+      <p class="contact__form-note">
+        Fields marked <span class="req" aria-hidden="true">*</span> are required.
+      </p>
 
-        <div class="form-grid">
-          <div class="form-group">
-            <label for="contact-name">Full Name *</label>
-            <input
-              id="contact-name"
-              type="text"
-              formControlName="name"
-              placeholder="Your name"
-              [class.invalid]="isInvalid('name')"
-              autocomplete="name"
-            >
-            @if(isInvalid('name')){
-            <small class="field-error">{{ getError('name') }}</small>
-            }
-          </div>
-
-          <div class="form-group">
-            <label for="contact-email">Email *</label>
-            <input
-              id="contact-email"
-              type="email"
-              formControlName="email"
-              placeholder="you@example.com"
-              [class.invalid]="isInvalid('email')"
-              autocomplete="email"
-            >
-            @if(isInvalid('email')){
-            <small class="field-error">{{ getError('email') }}</small>
-            }
-          </div>
-
-          <div class="form-group">
-            <label for="contact-phone">Phone *</label>
-            <input
-              id="contact-phone"
-              type="tel"
-              formControlName="phone"
-              placeholder="10-digit mobile number"
-              maxlength="10"
-              [class.invalid]="isInvalid('phone')"
-              autocomplete="tel"
-            >
-            @if(isInvalid('phone')){
-            <small class="field-error">{{ getError('phone') }}</small>
-            }
-          </div>
-
-          <div class="form-group">
-            <label for="contact-company">Company</label>
-            <input
-              id="contact-company"
-              type="text"
-              formControlName="company"
-              placeholder="Optional"
-              [class.invalid]="isInvalid('company')"
-              autocomplete="organization"
-            >
-            @if(isInvalid('company')){
-            <small class="field-error">{{ getError('company') }}</small>
-            }
-          </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label" for="contact-name">
+            Full name <span class="req" aria-hidden="true">*</span>
+          </label>
+          <input
+            id="contact-name"
+            type="text"
+            class="form-control"
+            formControlName="name"
+            (blur)="trimField('name')"
+            placeholder="Your name"
+            autocomplete="name"
+            [class.is-invalid]="isInvalid('name')"
+            [attr.aria-invalid]="isInvalid('name')"
+            [attr.aria-describedby]="isInvalid('name') ? 'contact-name-error' : null"
+          >
+          @if (isInvalid('name')) {
+            <small class="field-error" id="contact-name-error">{{ getError('name') }}</small>
+          }
         </div>
 
         <div class="form-group">
-          <label for="contact-message">Message *</label>
+          <label class="form-label" for="contact-email">
+            Email <span class="req" aria-hidden="true">*</span>
+          </label>
+          <input
+            id="contact-email"
+            type="email"
+            class="form-control"
+            formControlName="email"
+            (blur)="trimField('email')"
+            placeholder="you@example.com"
+            autocomplete="email"
+            inputmode="email"
+            [class.is-invalid]="isInvalid('email')"
+            [attr.aria-invalid]="isInvalid('email')"
+            [attr.aria-describedby]="isInvalid('email') ? 'contact-email-error' : null"
+          >
+          @if (isInvalid('email')) {
+            <small class="field-error" id="contact-email-error">{{ getError('email') }}</small>
+          }
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="contact-phone">
+            Phone <span class="req" aria-hidden="true">*</span>
+          </label>
+          <input
+            id="contact-phone"
+            type="tel"
+            class="form-control"
+            formControlName="phone"
+            placeholder="10-digit mobile number"
+            maxlength="10"
+            inputmode="numeric"
+            autocomplete="tel-national"
+            [class.is-invalid]="isInvalid('phone')"
+            [attr.aria-invalid]="isInvalid('phone')"
+            [attr.aria-describedby]="isInvalid('phone') ? 'contact-phone-error' : 'contact-phone-hint'"
+          >
+          @if (isInvalid('phone')) {
+            <small class="field-error" id="contact-phone-error">{{ getError('phone') }}</small>
+          } @else {
+            <small class="field-hint" id="contact-phone-hint">We use this for WhatsApp follow-up.</small>
+          }
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="contact-company">
+            Company <span class="optional">optional</span>
+          </label>
+          <input
+            id="contact-company"
+            type="text"
+            class="form-control"
+            formControlName="company"
+            (blur)="trimField('company')"
+            placeholder="Organisation or college"
+            autocomplete="organization"
+            [class.is-invalid]="isInvalid('company')"
+            [attr.aria-invalid]="isInvalid('company')"
+          >
+          @if (isInvalid('company')) {
+            <small class="field-error">{{ getError('company') }}</small>
+          }
+        </div>
+
+        <div class="form-group form-group--full">
+          <label class="form-label" for="contact-message">
+            What do you need built? <span class="req" aria-hidden="true">*</span>
+          </label>
           <textarea
             id="contact-message"
-            rows="6"
+            rows="7"
+            class="form-control"
             formControlName="message"
-            placeholder="Describe your project, timeline, and budget..."
-            [class.invalid]="isInvalid('message')"
+            placeholder="Describe the project, who it's for, your deadline, and a budget range if you have one."
+            [class.is-invalid]="isInvalid('message')"
+            [attr.aria-invalid]="isInvalid('message')"
+            [attr.aria-describedby]="isInvalid('message') ? 'contact-message-error' : null"
           ></textarea>
-          @if(isInvalid('message')){
-          <small class="field-error">{{ getError('message') }}</small>
-          }
-          <small class="char-count">{{ message?.value?.length || 0 }} / 5000</small>
+          <div class="contact__meta">
+            @if (isInvalid('message')) {
+              <small class="field-error" id="contact-message-error">{{ getError('message') }}</small>
+            } @else {
+              <small class="field-hint">The more specific you are, the more accurate the quote.</small>
+            }
+            <small class="char-count">{{ messageLength }} / 5000</small>
+          </div>
         </div>
+      </div>
 
-        <div class="form-feedback">
-          @if(submitError){
-          <div class="alert alert-error" role="alert">{{ submitError }}</div>
-          }
+      <div class="contact__feedback">
+        <app-alert tone="error" [message]="submitError()" title="Message not sent" />
+        <app-alert tone="success" [message]="submitSuccess()" title="Message sent" />
+      </div>
 
-          @if(submitSuccess){
-          <div class="alert alert-success" role="status">{{ submitSuccess }}</div>
-          }
-        </div>
+      <button
+        type="submit"
+        class="btn btn-accent btn-lg contact__submit"
+        [disabled]="isSubmitting()"
+      >
+        @if (isSubmitting()) {
+          <span class="spinner" aria-hidden="true"></span>
+          Sending…
+        } @else {
+          Send message
+        }
+      </button>
+    </form>
 
-        <button class="btn btn-primary submit-btn" type="submit" [disabled]="isSubmitting">
-          @if(isSubmitting){
-          <span class="spinner"></span>
-          Sending...
-          } @else {
-          Send Message
+    <!-- --------------------------- aside ---------------------------- -->
+    <aside class="contact__aside" aria-label="What happens next">
+      <div class="contact__card">
+        <p class="kicker">What happens next</p>
+        <h2 class="contact__aside-title">You'll hear back within a day</h2>
+        <ul class="contact__assurances">
+          @for (item of assurances; track item) {
+            <li>{{ item }}</li>
           }
-        </button>
-      </form>
+        </ul>
+      </div>
+
+      <div class="contact__card">
+        <h3 class="contact__aside-sub">Prefer email or WhatsApp?</h3>
+        <p class="contact__direct-note">
+          Both reach the same person. Email is better for attachments and a written thread;
+          WhatsApp is faster for a single question.
+        </p>
+        <ul class="contact__direct">
+          <li>
+            <span class="contact__direct-label">Email</span>
+            <a [href]="emailHref" class="contact__email">{{ email }}</a>
+          </li>
+          <li>
+            <span class="contact__direct-label">WhatsApp</span>
+            <a [href]="whatsappHref" target="_blank" rel="noopener noreferrer">
+              Start a WhatsApp chat
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="contact__card contact__card--muted">
+        <h3 class="contact__aside-sub">Submitting an academic project?</h3>
+        <p>
+          The student project form asks for your college, branch and submission date, and lets
+          you attach a synopsis — it gets you a more accurate answer.
+        </p>
+        <a routerLink="/student-projects" class="link-arrow">
+          Use the final year project form
+          <span class="arrow" aria-hidden="true">&rarr;</span>
+        </a>
+      </div>
+    </aside>
+
+  </div>
+</section>
+
+<!-- ======================= WHAT TO INCLUDE ======================= -->
+<section class="section contact-guide">
+  <div class="container">
+    <div class="section-head">
+      <p class="kicker">Before you send</p>
+      <h2>What to include so the first reply is useful</h2>
+      <p>
+        We answer every enquiry with a plan rather than a brochure, and the usefulness of
+        that plan depends almost entirely on what you send. None of this is mandatory —
+        send what you have and we will ask about the rest.
+      </p>
+    </div>
+
+    <div class="contact-guide__grid">
+      <article class="contact-guide__block">
+        <h3>If you are a student</h3>
+        <p>
+          Your branch, your college's submission date, and anything your guide has already
+          fixed. If you have a synopsis, an abstract or an IEEE paper, attach it. If you
+          have no project idea yet, say so plainly — that is a completely normal starting
+          point, and we will come back with options that suit your branch and your deadline
+          rather than whatever is quickest to build.
+        </p>
+        <p>
+          The <a routerLink="/student-projects">final year project help</a> form asks for
+          all of this directly, so it gets you a more exact answer than a plain message
+          will.
+        </p>
+      </article>
+
+      <article class="contact-guide__block">
+        <h3>If you are hiring us for commercial work</h3>
+        <p>
+          What the software has to do, who will use it, when you need it live, and a budget
+          range if you have one. A rough range is not a weakness to give away — it tells us
+          whether to propose the full build or a smaller first version, which saves a whole
+          round of back and forth. If the details are sensitive, send the NDA first and we
+          will sign it before you share anything.
+        </p>
+        <p>
+          How engagements are structured is set out on the
+          <a routerLink="/freelance-services">hire a freelance full stack developer</a>
+          page.
+        </p>
+      </article>
+
+      <article class="contact-guide__block">
+        <h3>If you are not sure what you need yet</h3>
+        <p>
+          Plenty of first messages are a paragraph describing a problem, not a
+          specification. That is fine, and often more useful. Describe the problem and the
+          constraint you are stuck on, and we will tell you what we would build, roughly
+          what it would cost, and whether we are the right people for it at all —
+          including when the answer is no.
+        </p>
+        <p>
+          If you would rather see the range first,
+          <a routerLink="/services">browse all development services</a>.
+        </p>
+      </article>
     </div>
   </div>
 </section>

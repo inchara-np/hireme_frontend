@@ -1,83 +1,188 @@
 <app-page-header
-  title="Freelance Services"
-  subtitle="Available for contract-based development — remote, flexible, and results-driven."
-></app-page-header>
+  kicker="For businesses & founders"
+  title="Hire a freelance full stack developer in India"
+  subtitle="Custom web application development, MVPs and small-business websites in Angular, Go and PostgreSQL. You deal directly with the engineer writing the code, remotely from anywhere in India, and you keep everything at the end."
+>
+  <div class="page-header__actions">
+    <a routerLink="/contact" [queryParams]="{ type: 'freelance' }" class="btn btn-accent btn-lg">
+      Request a quote
+    </a>
+    <a [routerLink]="[]" fragment="engagement" class="btn btn-outline btn-lg">Compare engagement models</a>
+  </div>
+</app-page-header>
 
-<section class="freelance-page">
+<!-- ============================ OFFERINGS ============================ -->
+<section class="section offerings">
   <div class="container">
+    <div class="section-head">
+      <p class="kicker">Scope</p>
+      <h2>Custom web application development we take on</h2>
+      <p>Work that fits a small, senior team — not everything, but these done properly.</p>
+    </div>
 
-    <div class="intro-banner card">
-      <h2>Hire Me for Your Next Build</h2>
+    <ul class="offerings__grid">
+      @for (offering of offerings; track offering.title; let i = $index) {
+        <li class="offering" [appReveal]="i * 60">
+          <h3>{{ offering.title }}</h3>
+          <p>{{ offering.body }}</p>
+        </li>
+      }
+    </ul>
+  </div>
+</section>
+
+<!-- ============================== STACK ============================== -->
+<section class="section fs-stack">
+  <div class="container">
+    <div class="section-head">
+      <p class="kicker">The stack</p>
+      <h2>Hire an Angular developer, a Go developer, or one person who is both</h2>
+    </div>
+
+    <div class="fs-prose">
       <p>
-        I'm a full-stack developer specializing in Golang backends and Angular frontends.
-        Whether you need a new feature, an MVP, or ongoing development support — I deliver
-        clean code with clear communication.
+        Most freelance enquiries we get are for one half of a product. A founder has a
+        backend and needs somebody to build the interface; an internal team has a front end
+        and needs an API behind it. We take on either — and because the same engineer does
+        both, the join between them stops being a project risk and a scheduling problem.
       </p>
-      <div class="banner-actions">
-        <a routerLink="/contact" [queryParams]="{ type: 'freelance' }" class="btn btn-primary">Request a Quote</a>
-      </div>
+      <p>
+        On the front end that means Angular: components, reactive forms, routing, state,
+        accessible markup, and prerendering or server-side rendering when the pages need to
+        be found in search rather than just to exist. On the back end it means Go with
+        PostgreSQL — REST APIs, token authentication, file uploads, migrations, and a schema
+        designed to survive the features you have not thought of yet. Infrastructure is
+        Docker plus a managed host, with SSL and environment configuration set up and
+        written down so your team can redeploy without us.
+      </p>
+      <p>
+        This is a deliberately narrow stack. If your problem genuinely needs something else
+        — a native mobile app, a data pipeline, a Windows desktop product — we will tell you
+        that in the first conversation instead of learning it on your budget. Here for an
+        academic project rather than a commercial one? Start with
+        <a routerLink="/student-projects">final year project help</a> instead.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- =========================== ENGAGEMENT =========================== -->
+<section class="section engagement" id="engagement">
+  <div class="container">
+    <div class="section-head">
+      <p class="kicker">Engagement models</p>
+      <h2>Three ways to hire us</h2>
+      <p>
+        No published rate card — pricing depends on scope and timeline, and you get a number
+        in writing before anything starts.
+      </p>
     </div>
 
-    <h2 class="section-title">What I Offer</h2>
-    <div class="offer-grid">
-      <div class="card">
-        <h3>🔧 Backend Development</h3>
-        <p>REST APIs, authentication, database design, microservices with Golang & PostgreSQL.</p>
+    <ul class="models">
+      @for (model of models; track model.name; let i = $index) {
+        <li
+          class="model"
+          [class.model--recommended]="model.recommended"
+          [appReveal]="i * 80"
+        >
+          @if (model.recommended) {
+            <span class="badge badge-accent model__badge">Most common</span>
+          }
+
+          <h3 class="model__name">{{ model.name }}</h3>
+          <p class="model__shape">{{ model.shape }}</p>
+
+          <p class="model__best">
+            <span class="model__best-label">Best for</span>
+            {{ model.bestFor }}
+          </p>
+
+          <ul class="model__points">
+            @for (point of model.points; track point) {
+              <li>{{ point }}</li>
+            }
+          </ul>
+        </li>
+      }
+    </ul>
+
+    <div class="engagement__cta panel-inverse">
+      <div>
+        <h2>Ready when you are</h2>
+        <p>
+          Send the scope, the deadline and the budget range. You'll have a written plan back
+          within 24 hours.
+        </p>
       </div>
-      <div class="card">
-        <h3>🎨 Frontend Development</h3>
-        <p>Responsive Angular apps, SSR, admin dashboards, and pixel-perfect UI implementation.</p>
-      </div>
-      <div class="card">
-        <h3>🔗 Full-Stack Projects</h3>
-        <p>End-to-end product development from requirements to production deployment.</p>
-      </div>
-      <div class="card">
-        <h3>🛠 Maintenance & Fixes</h3>
-        <p>Bug fixes, performance optimization, code review, and legacy system modernization.</p>
-      </div>
+      <a routerLink="/contact" [queryParams]="{ type: 'freelance' }" class="btn btn-accent btn-lg">
+        Request a quote
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ WHO IT'S FOR ========================= -->
+<section class="section fs-clients">
+  <div class="container">
+    <div class="section-head">
+      <p class="kicker">Who hires us</p>
+      <h2>Website and MVP development for small businesses and startups</h2>
     </div>
 
-    <h2 class="section-title">Engagement Models</h2>
-    <div class="pricing-grid">
-      <div class="card pricing-card">
-        <h3>Hourly</h3>
-        <p class="price">Flexible</p>
-        <p>Best for small tasks, bug fixes, and consultations.</p>
-        <ul>
-          <li>Pay as you go</li>
-          <li>Quick turnaround</li>
-          <li>No long commitment</li>
-        </ul>
-      </div>
-      <div class="card pricing-card featured">
-        <span class="badge">Recommended</span>
-        <h3>Project-Based</h3>
-        <p class="price">Fixed Scope</p>
-        <p>Best for MVPs, features, and defined deliverables.</p>
-        <ul>
-          <li>Clear milestones</li>
-          <li>Fixed timeline & cost</li>
-          <li>Weekly progress reports</li>
-        </ul>
-      </div>
-      <div class="card pricing-card">
-        <h3>Monthly Retainer</h3>
-        <p class="price">Ongoing</p>
-        <p>Best for startups needing continuous development.</p>
-        <ul>
-          <li>Dedicated availability</li>
-          <li>Priority support</li>
-          <li>Flexible scope each month</li>
-        </ul>
-      </div>
+    <div class="fs-clients__grid">
+      <article class="fs-client">
+        <h3>Small businesses that have outgrown a page builder</h3>
+        <p>
+          A booking flow, a customer portal, a catalogue with a real back office, or a
+          marketing site that loads fast and can actually be found in search. The giveaway
+          is usually a spreadsheet doing a job software should be doing, or a template site
+          that cannot be extended without a plugin for every idea.
+        </p>
+        <p>
+          Website development for a small business is normally a fixed-scope build: one
+          agreed number, a written scope, and a delivery that includes the deploy, the SSL,
+          the admin login and a short written guide to running the thing. You are not left
+          with a site only the person who built it can change.
+        </p>
+      </article>
+
+      <article class="fs-client">
+        <h3>Founders who need an MVP in front of real users</h3>
+        <p>
+          MVP development for a startup is mostly an exercise in deciding what
+          <em>not</em> to build. So the first thing we do with your scope is come back with
+          what we would cut from version one and why — the features that can wait until
+          somebody has actually used the product and told you what is missing.
+        </p>
+        <p>
+          What you get is working software on a real domain, a database schema that can grow
+          instead of being replaced, and the repository. Not a clickable prototype that has
+          to be thrown away the moment it finds users.
+        </p>
+      </article>
     </div>
 
-    <div class="cta-box card">
-      <h3>Ready to work together?</h3>
-      <p>Send your project details and get a response within 24 hours.</p>
-      <a routerLink="/contact" [queryParams]="{ type: 'freelance' }" class="btn btn-primary">Start Hiring →</a>
+    <p class="fs-clients__link">
+      Not sure which of these you are?
+      <a routerLink="/services">Browse all development services</a> or
+      <a routerLink="/contact" [queryParams]="{ type: 'freelance' }">describe your project
+      and request a quote</a> — the first conversation costs nothing.
+    </p>
+  </div>
+</section>
+
+<!-- ============================== FAQ ================================ -->
+<section class="section fs-faq">
+  <div class="container">
+    <div class="section-head">
+      <p class="kicker">FAQ</p>
+      <h2>What founders and small businesses ask us</h2>
+      <p>
+        The practical questions, including the ones about ownership and NDAs that are
+        awkward to ask first.
+      </p>
     </div>
 
+    <app-faq [items]="faqs" />
   </div>
 </section>

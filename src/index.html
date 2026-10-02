@@ -1,15 +1,130 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
-  <title>Valahatti Technologies</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/png" href="logo.png">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <meta name="theme-color" content="#183d89" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#080d19" media="(prefers-color-scheme: dark)">
+
+  <!-- Baseline title/description. SeoService overwrites both, plus the
+       canonical link and every og:/twitter: tag, per route. -->
+  <title>Final Year Projects &amp; Custom Web Apps | Valahatti Technologies</title>
+  <meta name="description"
+    content="Final year and IEEE projects with complete source code, report and PPT — plus custom web applications and MVPs for businesses. Angular, Go, PostgreSQL.">
+  <link rel="canonical" href="https://valahatti-tech.com/">
+
+  <!-- Icons. The 1 MB logo.png is no longer used as a favicon. -->
+  <link rel="icon" type="image/x-icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" href="logo-192.png" sizes="192x192">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+  <!-- Fonts: connect early so the display face is not the render blocker. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap"
+    rel="stylesheet">
+
+  <!-- Open Graph / Twitter baseline. Per-route values come from SeoService. -->
+  <meta property="og:site_name" content="Valahatti Technologies">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="en_IN">
+  <meta property="og:url" content="https://valahatti-tech.com/">
+  <meta property="og:title" content="Final Year Projects &amp; Custom Web Apps | Valahatti Technologies">
+  <meta property="og:description"
+    content="Final year and IEEE projects with source code, report and PPT — plus custom web applications and MVPs for businesses and founders.">
+  <meta property="og:image" content="https://valahatti-tech.com/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Valahatti Technologies — academic projects and freelance engineering">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Final Year Projects &amp; Custom Web Apps | Valahatti Technologies">
+  <meta name="twitter:description"
+    content="Final year and IEEE projects with source code, report and PPT — plus custom web applications and MVPs for businesses and founders.">
+  <meta name="twitter:image" content="https://valahatti-tech.com/og-image.png">
+
+  <!-- Organization structured data.
+       `sameAs` is intentionally omitted: no social profiles have been
+       confirmed for this business, and inventing them would poison the
+       knowledge panel. Add the array once real profile URLs exist. -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": "https://valahatti-tech.com/#organization",
+    "name": "Valahatti Technologies",
+    "url": "https://valahatti-tech.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://valahatti-tech.com/logo-512.png",
+      "width": 512,
+      "height": 512
+    },
+    "image": "https://valahatti-tech.com/og-image.png",
+    "description": "Software development studio building final year and IEEE projects for engineering students and custom web applications for businesses.",
+    "email": "valahatti.tech@gmail.com",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "customer support",
+      "email": "valahatti.tech@gmail.com",
+      "url": "https://valahatti-tech.com/contact",
+      "areaServed": "IN",
+      "availableLanguage": "English"
+    },
+    "areaServed": {
+      "@type": "Country",
+      "name": "India"
+    },
+    "knowsAbout": [
+      "Go",
+      "Angular",
+      "PostgreSQL",
+      "REST API development",
+      "Academic project development",
+      "Final year project development",
+      "IEEE project implementation",
+      "Custom web application development",
+      "MVP development",
+      "Freelance software development"
+    ]
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": "https://valahatti-tech.com/#website",
+    "url": "https://valahatti-tech.com/",
+    "name": "Valahatti Technologies",
+    "publisher": { "@id": "https://valahatti-tech.com/#organization" },
+    "inLanguage": "en-IN"
+  }
+  </script>
+
+  <!-- Apply the saved theme before first paint so dark-mode visitors never
+       see a white flash. Kept inline and tiny; the CSP allows it via the
+       matching hash in public/_headers. -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('theme');
+        if (t !== 'dark' && t !== 'light') {
+          t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.classList.add(t + '-theme');
+      } catch (e) {
+        document.documentElement.classList.add('light-theme');
+      }
+    })();
+  </script>
 </head>
-<body class="mat-typography">
+
+<body>
   <app-root></app-root>
 </body>
+
 </html>

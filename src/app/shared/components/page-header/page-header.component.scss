@@ -1,18 +1,72 @@
+@use 'mixins' as *;
+
 .page-header {
-  padding: 80px 0 40px;
-  background: var(--hero-bg);
-  color: white;
-  text-align: center;
+  position: relative;
+  overflow: hidden;
+  padding-block: clamp(2.75rem, 1.8rem + 4vw, 5rem) clamp(2rem, 1.4rem + 3vw, 3.5rem);
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
+  @include blueprint-grid(64px);
+}
+
+/* Soft brand wash anchored to the top-left, so the header is not a flat slab. */
+.page-header__glow {
+  position: absolute;
+  inset: auto auto 0 -10%;
+  width: min(48rem, 90%);
+  height: 150%;
+  pointer-events: none;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--brand-400) 18%, transparent),
+    transparent
+  );
+}
+
+.page-header__inner {
+  position: relative;
+  max-width: calc(var(--container) - 2 * 0);
+}
+
+.page-header__kicker {
+  margin-bottom: var(--space-3);
 }
 
 .page-header h1 {
-  margin: 0 0 16px;
-  font-size: 48px;
+  max-width: 20ch;
+  margin-bottom: var(--space-4);
 }
 
-.page-header p {
-  margin: 0 auto;
-  max-width: 700px;
-  font-size: 18px;
-  opacity: 0.95;
+.page-header__subtitle {
+  max-width: 58ch;
+  font-size: var(--fs-lead);
+  line-height: var(--lh-relaxed);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* --- inverse variant ------------------------------------------------------ */
+.page-header--inverse {
+  background: var(--panel-inverse-bg);
+  border-bottom-color: transparent;
+
+  h1 {
+    color: #fff;
+  }
+
+  .page-header__subtitle {
+    color: rgba(255, 255, 255, 0.76);
+  }
+
+  .kicker {
+    color: var(--accent-300);
+  }
+
+  .page-header__glow {
+    background: radial-gradient(
+      closest-side,
+      rgba(248, 161, 2, 0.16),
+      transparent
+    );
+  }
 }

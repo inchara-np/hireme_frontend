@@ -1,0 +1,109 @@
+@use 'mixins' as *;
+
+.notfound {
+  display: grid;
+  place-items: center;
+  min-height: clamp(30rem, 78vh, 46rem);
+  padding-block: var(--section-y);
+  background: var(--hero-bg);
+}
+
+.notfound__inner {
+  text-align: left;
+}
+
+.notfound__code {
+  font-family: var(--font-display);
+  font-size: clamp(4.5rem, 3rem + 9vw, 9rem);
+  font-weight: 800;
+  line-height: 0.85;
+  letter-spacing: -0.05em;
+  margin: 0 0 var(--space-4);
+  color: transparent;
+  -webkit-text-stroke: 2px var(--brand-400);
+  opacity: 0.55;
+}
+
+.notfound__path {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-8);
+}
+
+.notfound__path-label {
+  @include kicker;
+  color: var(--text-muted);
+}
+
+.notfound__path code {
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-xs);
+  background: var(--bg-subtle);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  word-break: break-all;
+}
+
+.notfound__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-bottom: var(--space-12);
+}
+
+.notfound__links-title {
+  @include kicker;
+  margin-bottom: var(--space-4);
+}
+
+.notfound__links ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-2);
+}
+
+.notfound__links li {
+  margin: 0;
+}
+
+.notfound__links a {
+  display: block;
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  text-decoration: none;
+  transition: border-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
+
+  strong {
+    display: block;
+    font-family: var(--font-display);
+    font-size: var(--fs-h4);
+    color: var(--text-primary);
+    margin-bottom: 0.15rem;
+  }
+
+  span {
+    font-size: var(--fs-sm);
+    color: var(--text-secondary);
+  }
+
+  &:hover {
+    border-color: var(--brand-400);
+    box-shadow: var(--shadow-md);
+  }
+
+  @include focus-visible;
+}
+
+@include motion-safe {
+  .notfound__links a:hover {
+    transform: translateX(3px);
+  }
+}

@@ -1,0 +1,48 @@
+<section class="notfound">
+  <div class="container-narrow notfound__inner">
+    <p class="notfound__code" aria-hidden="true">404</p>
+
+    <h1>This page doesn't exist</h1>
+
+    <p class="lead">
+      The link may be out of date, or the address may have a typo. Nothing is broken on your
+      side — here's where to go instead.
+    </p>
+
+    @if (attemptedPath && attemptedPath !== '/') {
+      <p class="notfound__path">
+        <span class="notfound__path-label">Requested</span>
+        <code>{{ attemptedPath }}</code>
+      </p>
+    }
+
+    <div class="notfound__actions">
+      <a routerLink="/" class="btn btn-primary btn-lg">Back to home</a>
+      <a routerLink="/contact" class="btn btn-outline btn-lg">Contact us</a>
+    </div>
+
+    <div class="notfound__links">
+      <p class="notfound__links-title">Popular pages</p>
+      <ul>
+        <li>
+          <a routerLink="/student-projects">
+            <strong>Student project help</strong>
+            <span>Mini, major, IEEE and research projects, built and documented.</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/freelance-services">
+            <strong>Hire a freelance developer</strong>
+            <span>Backend, frontend and full-stack work on contract.</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/services">
+            <strong>All services</strong>
+            <span>What we build, and how each engagement works.</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>

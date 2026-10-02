@@ -1,0 +1,12 @@
+# Valahatti Technologies — https://valahatti-tech.com
+#
+# The admin panel is client-rendered and behind a login, but it is still
+# disallowed here so crawlers do not waste budget on a shell that renders
+# nothing useful. Every admin route also emits `noindex, nofollow` via
+# SeoService, which is what actually keeps it out of the index.
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+
+Sitemap: https://valahatti-tech.com/sitemap.xml

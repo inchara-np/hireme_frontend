@@ -1,25 +1,52 @@
-<div class="admin-layout">
-  <aside class="sidebar">
-    <div class="brand">
-      <img src="/logo.png" alt="Valahatti" class="brand-logo">
-      <div>
-        <span>Valahatti</span>
-        <small>Admin Panel</small>
-      </div>
-    </div>
+<div class="admin" [class.admin--open]="sidebarOpen()">
 
-    <nav>
-      <a routerLink="/admin/dashboard" routerLinkActive="active">Dashboard</a>
-      <a routerLink="/admin/leads" routerLinkActive="active">Leads</a>
+  <aside class="sidebar" aria-label="Admin navigation">
+    <a routerLink="/admin/dashboard" class="sidebar__brand">
+      <img src="logo.png" alt="" width="34" height="34">
+      <span>
+        <span class="sidebar__brand-name">Valahatti</span>
+        <span class="sidebar__brand-sub">Admin panel</span>
+      </span>
+    </a>
+
+    <nav class="sidebar__nav">
+      @for (item of navItems; track item.path) {
+        <a [routerLink]="item.path" routerLinkActive="is-active" class="sidebar__link">
+          {{ item.label }}
+        </a>
+      }
     </nav>
 
-    <div class="sidebar-footer">
-      <app-theme-toggle></app-theme-toggle>
-      <button type="button" class="logout" (click)="logout()">Logout</button>
+    <div class="sidebar__footer">
+      <div class="sidebar__footer-row">
+        <span class="sidebar__footer-label">Theme</span>
+        <app-theme-toggle />
+      </div>
+      <button type="button" class="sidebar__logout" (click)="logout()">Sign out</button>
     </div>
   </aside>
 
-  <main class="content">
-    <router-outlet></router-outlet>
-  </main>
+  <div class="admin__main">
+    <header class="topbar">
+      <button
+        type="button"
+        class="topbar__toggle"
+        (click)="toggleSidebar()"
+        [attr.aria-expanded]="sidebarOpen()"
+        [attr.aria-label]="sidebarOpen() ? 'Close admin navigation' : 'Open admin navigation'"
+      >
+        <span></span><span></span><span></span>
+      </button>
+      <span class="topbar__title">Admin panel</span>
+      <a routerLink="/" class="topbar__site">View site</a>
+    </header>
+
+    <div class="admin__content">
+      <router-outlet />
+    </div>
+  </div>
+
+  @if (sidebarOpen()) {
+    <div class="admin__scrim" (click)="closeSidebar()" aria-hidden="true"></div>
+  }
 </div>

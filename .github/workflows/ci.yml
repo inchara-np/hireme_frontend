@@ -1,0 +1,81 @@
+name: CI
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: ['**']
+
+# Cancel superseded runs on the same ref instead of queuing them.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    name: Build, test and lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit tests (headless Chrome)
+        run: npm run test:ci
+
+      - name: Production build
+        run: npm run build
+
+      # Guards the thing SEO actually depends on: if prerendering silently
+      # stops emitting HTML, the site goes back to being an empty shell for
+      # crawlers and nobody notices until rankings drop.
+      - name: Verify prerendered routes
+        run: |
+          set -euo pipefail
+          for page in index services/index student-projects/index freelance-services/index contact/index; do
+            file="dist/frontend/browser/${page}.html"
+            if [ ! -f "$file" ]; then
+              echo "::error::Missing prerendered output: $file"
+              exit 1
+            fi
+            if ! grep -q "<title>" "$file"; then
+              echo "::error::No <title> in $file"
+              exit 1
+            fi
+            if ! grep -q 'rel="canonical"' "$file"; then
+              echo "::error::No canonical link in $file"
+              exit 1
+            fi
+          done
+          echo "All 5 public routes prerendered with title + canonical."
+
+      - name: Verify admin code is not in the initial bundle
+        run: |
+          set -euo pipefail
+          if grep -rl "admin-layout" dist/frontend/browser/main-*.js >/dev/null 2>&1; then
+            echo "::error::Admin code leaked into the initial bundle."
+            exit 1
+          fi
+          echo "Admin stays in its own lazy chunk."
+
+      - name: Upload build output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/frontend/browser
+          retention-days: 7

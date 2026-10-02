@@ -1,37 +1,48 @@
-<section class="dashboard-page">
-  <h1>Dashboard</h1>
-
-  @if(isLoading){
-  <p>Loading dashboard...</p>
-  }
-
-  @if(errorMessage){
-  <div class="alert">{{ errorMessage }}</div>
-  }
-
-  @if(dashboard){
-  <p class="welcome">{{ dashboard.message }}</p>
-
-  <div class="stats-grid">
-    <div class="stat-card card">
-      <span>Total Leads</span>
-      <strong>{{ dashboard.stats['TOTAL'] || 0 }}</strong>
+<section class="dash">
+  <header class="dash__head">
+    <div>
+      <p class="kicker">Overview</p>
+      <h1 class="dash__title">Dashboard</h1>
+      @if (dashboard(); as data) {
+        <p class="dash__welcome">{{ data.message }}</p>
+      }
     </div>
+    <button type="button" class="btn btn-outline btn-sm" (click)="load()" [disabled]="isLoading()">
+      @if (isLoading()) {
+        <span class="spinner" aria-hidden="true"></span>
+      }
+      Refresh
+    </button>
+  </header>
 
-    <div class="stat-card card">
-      <span>New</span>
-      <strong>{{ dashboard.stats['NEW'] || 0 }}</strong>
-    </div>
+  <app-alert
+    tone="error"
+    [message]="errorText()"
+    title="Couldn't load the dashboard"
+    retryLabel="Try again"
+    (retry)="load()"
+  />
 
-    <div class="stat-card card">
-      <span>In Progress</span>
-      <strong>{{ dashboard.stats['IN_PROGRESS'] || 0 }}</strong>
-    </div>
-
-    <div class="stat-card card">
-      <span>Completed</span>
-      <strong>{{ dashboard.stats['COMPLETED'] || 0 }}</strong>
-    </div>
+  <div class="dash__grid">
+    @for (tile of tiles; track tile.key) {
+      <div class="stat" [class]="'stat--' + tile.tone">
+        <span class="stat__label">{{ tile.label }}</span>
+        @if (isLoading()) {
+          <span class="skeleton stat__skeleton" aria-hidden="true"></span>
+          <span class="visually-hidden">Loading</span>
+        } @else {
+          <strong class="stat__value">{{ statValue(tile.key) }}</strong>
+        }
+        <span class="stat__hint">{{ tile.hint }}</span>
+      </div>
+    }
   </div>
-  }
+
+  <div class="dash__next">
+    <div>
+      <h2 class="dash__next-title">Work the queue</h2>
+      <p>Open the requests list to read submissions, filter by type and update statuses.</p>
+    </div>
+    <a routerLink="/admin/leads" class="btn btn-primary">Go to requests</a>
+  </div>
 </section>

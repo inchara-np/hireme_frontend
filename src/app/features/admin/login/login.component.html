@@ -1,51 +1,74 @@
-<section class="login-page">
-  <div class="login-top">
-    <img src="/logo.png" alt="Valahatti Technologies" class="login-logo">
-    <app-theme-toggle></app-theme-toggle>
+<div class="login">
+  <div class="login__aside" aria-hidden="true">
+    <div class="login__aside-inner">
+      <img src="logo.png" alt="" width="56" height="56" class="login__mark">
+      <p class="login__aside-kicker">Valahatti Technologies</p>
+      <p class="login__aside-text">
+        Every enquiry from the website &mdash; student projects, freelance work and business
+        requests &mdash; lands here.
+      </p>
+    </div>
   </div>
 
-  <div class="login-card card">
-    <h1>Admin Login</h1>
-    <p>Sign in to view all client requests and manage leads.</p>
+  <main class="login__panel">
+    <div class="login__top">
+      <a routerLink="/" class="login__back">&larr; Back to site</a>
+      <app-theme-toggle />
+    </div>
 
-    <form [formGroup]="loginForm" (ngSubmit)="submit()" novalidate>
-      <div class="form-group">
-        <label for="login-email">Email</label>
-        <input
-          id="login-email"
-          type="email"
-          formControlName="email"
-          placeholder="admin@valahatti.com"
-          autocomplete="email"
-          [class.invalid]="isInvalid('email')"
-        >
-        @if(isInvalid('email')){
-        <small class="field-error">{{ getError('email') }}</small>
-        }
-      </div>
+    <div class="login__card">
+      <img src="logo.png" alt="Valahatti Technologies" width="44" height="44" class="login__card-mark">
+      <h1 class="login__title">Sign in</h1>
+      <p class="login__subtitle">Admin access to leads and dashboard.</p>
 
-      <div class="form-group">
-        <label for="login-password">Password</label>
-        <input
-          id="login-password"
-          type="password"
-          formControlName="password"
-          placeholder="Enter password"
-          autocomplete="current-password"
-          [class.invalid]="isInvalid('password')"
-        >
-        @if(isInvalid('password')){
-        <small class="field-error">{{ getError('password') }}</small>
-        }
-      </div>
+      <form [formGroup]="loginForm" (ngSubmit)="submit()" novalidate>
+        <div class="form-group login__field">
+          <label class="form-label" for="login-email">Email</label>
+          <input
+            id="login-email"
+            type="email"
+            class="form-control"
+            formControlName="email"
+            (blur)="trimField('email')"
+            placeholder="you@example.com"
+            autocomplete="email"
+            inputmode="email"
+            [class.is-invalid]="isInvalid('email')"
+            [attr.aria-invalid]="isInvalid('email')"
+          >
+          @if (isInvalid('email')) {
+            <small class="field-error">{{ getError('email') }}</small>
+          }
+        </div>
 
-      @if(errorMessage){
-      <div class="alert" role="alert">{{ errorMessage }}</div>
-      }
+        <div class="form-group login__field">
+          <label class="form-label" for="login-password">Password</label>
+          <input
+            id="login-password"
+            type="password"
+            class="form-control"
+            formControlName="password"
+            placeholder="Your password"
+            autocomplete="current-password"
+            [class.is-invalid]="isInvalid('password')"
+            [attr.aria-invalid]="isInvalid('password')"
+          >
+          @if (isInvalid('password')) {
+            <small class="field-error">{{ getError('password') }}</small>
+          }
+        </div>
 
-      <button class="btn btn-primary" type="submit" [disabled]="isSubmitting">
-        {{ isSubmitting ? 'Signing in...' : 'Sign In' }}
-      </button>
-    </form>
-  </div>
-</section>
+        <app-alert tone="error" [message]="errorMessageText()" />
+
+        <button type="submit" class="btn btn-primary btn-block login__submit" [disabled]="isSubmitting()">
+          @if (isSubmitting()) {
+            <span class="spinner" aria-hidden="true"></span>
+            Signing in…
+          } @else {
+            Sign in
+          }
+        </button>
+      </form>
+    </div>
+  </main>
+</div>

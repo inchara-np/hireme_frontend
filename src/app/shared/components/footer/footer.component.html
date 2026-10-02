@@ -1,18 +1,66 @@
-<footer class="site-footer">
-  <div class="footer-content">
-    <div class="footer-brand">
-      <strong>Valahatti Technologies</strong>
-      <p>Full-stack development • Freelancing • Student Projects</p>
+<footer class="footer">
+  <div class="container footer__inner">
+
+    <div class="footer__brand">
+      <a routerLink="/" class="footer__logo" aria-label="Valahatti Technologies — home">
+        <img src="logo.png" alt="" width="36" height="36" loading="lazy">
+        <span>
+          <span class="footer__name">Valahatti</span>
+          <span class="footer__sub">Technologies</span>
+        </span>
+      </a>
+      <p class="footer__pitch">
+        Software built end to end — final year and IEEE projects for engineering students,
+        and custom web applications for businesses and founders.
+      </p>
+      <p class="footer__note">Remote, for students and businesses anywhere in India.</p>
     </div>
-    <div class="footer-links">
-      <a routerLink="/services">Services</a>
-      <a routerLink="/freelance-services">Freelance</a>
-      <a routerLink="/student-projects">Student Projects</a>
-      <a routerLink="/contact">Contact</a>
+
+    <nav class="footer__col" aria-labelledby="footer-services">
+      <h2 class="footer__heading" id="footer-services">Services</h2>
+      <ul>
+        @for (link of serviceLinks; track link.path) {
+          <li><a [routerLink]="link.path">{{ link.label }}</a></li>
+        }
+      </ul>
+    </nav>
+
+    <nav class="footer__col" aria-labelledby="footer-company">
+      <h2 class="footer__heading" id="footer-company">Company</h2>
+      <ul>
+        @for (link of companyLinks; track link.path) {
+          <li><a [routerLink]="link.path">{{ link.label }}</a></li>
+        }
+      </ul>
+    </nav>
+
+    <div class="footer__col">
+      <h2 class="footer__heading">Start a conversation</h2>
+      <p class="footer__contact-note">
+        Share your requirement and you'll get a reply with scope, timeline and cost.
+      </p>
+      <a routerLink="/contact" class="btn btn-accent btn-sm footer__cta">Request a quote</a>
+
+      <ul class="footer__direct">
+        <li>
+          <a class="footer__email" [href]="emailHref">{{ email }}</a>
+        </li>
+        <li>
+          <a
+            class="footer__whatsapp"
+            [href]="whatsappHref"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Message on WhatsApp
+          </a>
+        </li>
+      </ul>
     </div>
   </div>
-  <div class="footer-bottom">
-    <span>© 2026 Valahatti Technologies. All rights reserved.</span>
-    <a routerLink="/admin/login" class="admin-link">Admin</a>
+
+  <div class="container footer__bottom">
+    <span>&copy; {{ year }} Valahatti Technologies. All rights reserved.</span>
+    <a routerLink="/admin/login" class="footer__admin" rel="nofollow">Admin</a>
   </div>
 </footer>
